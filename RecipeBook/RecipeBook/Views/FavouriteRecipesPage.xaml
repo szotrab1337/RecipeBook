@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RecipeBook.Views.FavouriteRecipesPage"
+             Background="#121212">
+    
+    <Shell.TitleView>
+        <Grid VerticalOptions="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="chef_36.png"
+                   Grid.Column="0"
+                   HeightRequest="30"/>
+            <Label Text="Ulubione"
+                   VerticalOptions="CenterAndExpand"
+                   TextColor="{StaticResource Primary}"
+                   Margin="5,0,0,0"
+                   Grid.Column="1"
+                   FontSize="20"
+                   FontAttributes="Bold"/>
+        </Grid>
+    </Shell.TitleView>
+
+    <AbsoluteLayout>
+        <Grid Margin="5,10,5,10"
+                     AbsoluteLayout.LayoutFlags="All"
+                     AbsoluteLayout.LayoutBounds="0,0,1,1">
+
+        </Grid>
+        <ImageButton Source="plus_80.png"
+                     BackgroundColor="Transparent"
+                     AbsoluteLayout.LayoutFlags="PositionProportional"
+                     AbsoluteLayout.LayoutBounds=".95,.95,50,50"
+                     HeightRequest="40"
+                     Command="{Binding AddShopCommand}"/>
+    </AbsoluteLayout>
+    
+</ContentPage>

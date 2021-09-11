@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31612.314
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeBook", "RecipeBook\RecipeBook\RecipeBook.csproj", "{E6D84A86-AC30-43DC-A3B4-A7D2DA82D29D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeBook.Android", "RecipeBook\RecipeBook.Android\RecipeBook.Android.csproj", "{11D09B00-F878-42AA-B714-7A34C56EFB78}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6D84A86-AC30-43DC-A3B4-A7D2DA82D29D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6D84A86-AC30-43DC-A3B4-A7D2DA82D29D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6D84A86-AC30-43DC-A3B4-A7D2DA82D29D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E6D84A86-AC30-43DC-A3B4-A7D2DA82D29D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6D84A86-AC30-43DC-A3B4-A7D2DA82D29D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6D84A86-AC30-43DC-A3B4-A7D2DA82D29D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{11D09B00-F878-42AA-B714-7A34C56EFB78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11D09B00-F878-42AA-B714-7A34C56EFB78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11D09B00-F878-42AA-B714-7A34C56EFB78}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{11D09B00-F878-42AA-B714-7A34C56EFB78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11D09B00-F878-42AA-B714-7A34C56EFB78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11D09B00-F878-42AA-B714-7A34C56EFB78}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F57BC8E3-4310-4B8F-A996-18CC56D89B26}
+	EndGlobalSection
+EndGlobal
