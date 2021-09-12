@@ -5,6 +5,7 @@
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              Background="#121212"
              x:Name="Recipes">
+    
     <Shell.TitleView>
         <Grid VerticalOptions="Center">
             <Grid.ColumnDefinitions>
@@ -26,15 +27,16 @@
 
     <AbsoluteLayout>
         <Grid Margin="5,10,5,10"
-                     AbsoluteLayout.LayoutFlags="All"
-                     AbsoluteLayout.LayoutBounds="0,0,1,1">
+              AbsoluteLayout.LayoutFlags="All"
+              AbsoluteLayout.LayoutBounds="0,0,1,1"
+              RowDefinitions="Auto,*">
 
             <Label Text="Nie masz żadnego przepisu!"
                    FontSize="20"
                    TextColor="{StaticResource TextDisabled}"
                    HorizontalOptions="CenterAndExpand"
                    VerticalOptions="CenterAndExpand"
-                   HorizontalTextAlignment="Center">
+                   HorizontalTextAlignment="Center" Grid.RowSpan="2">
                 <!--<Label.Style>
                     <Style TargetType="Label">
                         <Setter Property="IsVisible"
@@ -51,8 +53,63 @@
                 </Label.Style>-->
             </Label>
 
-            <RefreshView>
-                
+            <SearchBar Grid.Row="0"
+                       TextColor="{StaticResource TextPrimary}"
+                       PlaceholderColor="Red"
+                       Placeholder="Wyszukaj..."
+                       CancelButtonColor="{StaticResource TextPrimary}"
+                       />
+            <RefreshView Grid.Row="1">
+                <CollectionView ItemsSource="{Binding Recipes}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <SwipeView>
+                                <ContentView Padding="5"
+                                             Background="#121212">
+                                    <Frame Padding="10"
+                                           CornerRadius="10"
+                                           HasShadow="True"
+                                           BackgroundColor="{StaticResource BackgroundSecondary}">
+                                        <Grid ColumnDefinitions="Auto, 10, *">
+                                            <Frame Padding="0"
+                                                   CornerRadius="5" Grid.Column="0">
+                                                <Image Source="placek.jpg"
+                                                       WidthRequest="140"
+                                                       HeightRequest="100"
+                                                       Aspect="Fill"/>
+                                            </Frame>
+                                            <StackLayout Orientation="Vertical" Grid.Column="2">
+                                                <StackLayout Orientation="Horizontal">
+                                                    <Label Text="Sernik Kasi super pyszny mega fajny"
+                                                           FontSize="20"/>
+                                                    <Image Source="star.png" HorizontalOptions="EndAndExpand"
+                                                           HeightRequest="20" VerticalOptions="Start"/>
+                                                </StackLayout>
+                                                <StackLayout Orientation="Vertical" VerticalOptions="EndAndExpand" Spacing="0">
+                                                    <StackLayout Orientation="Horizontal">
+                                                        <Label Text="Czas wykonania: 50min"
+                                                               TextColor="{StaticResource TextSecondary}"
+                                                               FontSize="13"/>
+                                                    </StackLayout>
+                                                    <StackLayout Orientation="Horizontal" >
+                                                        <Label Text="Ilość porcji: 3"
+                                                               TextColor="{StaticResource TextSecondary}"
+                                                               FontSize="13"/>
+                                                        <Label Text="Utworzono: 12.09.2021"
+                                                               TextColor="{StaticResource TextDisabled}"
+                                                               FontSize="10"
+                                                               HorizontalOptions="EndAndExpand"
+                                                               VerticalOptions="EndAndExpand"/>
+                                                    </StackLayout>
+                                                </StackLayout>
+                                            </StackLayout>
+                                        </Grid>
+                                    </Frame>
+                                </ContentView>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </RefreshView>
             
             <!--<RefreshView IsRefreshing="{Binding IsRefreshing}"
