@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using System.Text;
+using Xamarin.Forms;
 
 namespace RecipeBook.Models
 {
@@ -15,25 +18,66 @@ namespace RecipeBook.Models
         }
         private string _Name;
         
-        public string Description
+        public string Hints
         {
-            get => _Description;
-            set { _Description = value; OnPropertyChanged("Description"); }
+            get => _Hints;
+            set { _Hints = value; OnPropertyChanged("Hints"); }
         }
-        private string _Description;
+        private string _Hints;
         
-        public string TimeOfMakingTheRecipe
+        public TimeSpan TimeOfMakingTheRecipe
         {
             get => _TimeOfMakingTheRecipe;
             set { _TimeOfMakingTheRecipe = value; OnPropertyChanged("TimeOfMakingTheRecipe"); }
         }
-        private string _TimeOfMakingTheRecipe;
+        private TimeSpan _TimeOfMakingTheRecipe;
         
-        public string NumberOfServings
+        public double NumberOfServings
         {
             get => _NumberOfServings;
             set { _NumberOfServings = value; OnPropertyChanged("NumberOfServings"); }
         }
-        private string _NumberOfServings;
+        private double _NumberOfServings;
+        
+        public DateTime CreatedOn
+        {
+            get => _CreatedOn;
+            set { _CreatedOn = value; OnPropertyChanged("CreatedOn"); }
+        }
+        private DateTime _CreatedOn;
+        
+        public string PictureRaw
+        {
+            get => _PictureRaw;
+            set { _PictureRaw = value; OnPropertyChanged("PictureRaw"); }
+        }
+        private string _PictureRaw;
+
+        public ImageSource Picture => string.IsNullOrEmpty(PictureRaw) ? null :
+            ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(PictureRaw)));
+
+        public bool IsFavourite
+        {
+            get => _IsFavourite;
+            set { _IsFavourite = value; OnPropertyChanged("IsFavourite"); }
+        }
+        private bool _IsFavourite;
+
+        public ObservableCollection<Ingredient> Ingredients
+        {
+            get => _Ingredients;
+            set { _Ingredients = value; OnPropertyChanged("Ingredients"); }
+        }
+        private ObservableCollection<Ingredient> _Ingredients;
+        
+        public ObservableCollection<MakingStep> MakingSteps
+        {
+            get => _MakingSteps;
+            set { _MakingSteps = value; OnPropertyChanged("MakingSteps"); }
+        }
+        private ObservableCollection<MakingStep> _MakingSteps;
+
+        public string FormattedTimeOfMakingTheRecipe => TimeOfMakingTheRecipe.TotalMinutes.ToString() + " min";
+        public string FormattedCreatedOn => CreatedOn.ToString(@"dd.MM.yyyy");
     }
 }

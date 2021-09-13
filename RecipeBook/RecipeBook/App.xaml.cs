@@ -1,5 +1,7 @@
-﻿using RecipeBook.Views;
+﻿using RecipeBook.Services;
+using RecipeBook.Views;
 using System;
+using System.IO;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -25,6 +27,18 @@ namespace RecipeBook
 
         protected override void OnResume()
         {
+        }
+
+        public static Database database;
+        public static Database Database
+        {
+            get
+            {
+                if (database == null)
+                    database = new Database(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "database.db3"));
+
+                return database;
+            }
         }
     }
 }

@@ -76,29 +76,49 @@
                                         <Grid ColumnDefinitions="Auto, 0, *">
                                             <Frame Padding="0"
                                                    CornerRadius="10" Grid.Column="0">
-                                                <Image Source="placek.jpg"
+                                                <Image Source="{Binding Picture}"
                                                        WidthRequest="140"
                                                        HeightRequest="100"
                                                        Aspect="AspectFill"/>
                                             </Frame>
                                             <StackLayout Orientation="Vertical" Grid.Column="2">
                                                 <StackLayout Orientation="Horizontal">
-                                                    <Label Text="Sernik Kasi super pyszny"
+                                                    <Label Text="{Binding Name}"
                                                            FontSize="20"/>
-                                                    <Image Source="star.png" HorizontalOptions="EndAndExpand"
-                                                           HeightRequest="20" VerticalOptions="Start"/>
+                                                    <Image HorizontalOptions="EndAndExpand"
+                                                           HeightRequest="20"
+                                                           VerticalOptions="Start">
+                                                        <Image.Style>
+                                                            <Style TargetType="Image">
+                                                                <Setter Property="Source" Value="star.png"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger TargetType="Image" Binding="{Binding IsFavourite}" Value="True">
+                                                                        <Setter Property="Source" Value="star_gold.png"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Image.Style>
+                                                    </Image>
                                                 </StackLayout>
                                                 <StackLayout Orientation="Vertical" VerticalOptions="EndAndExpand" Spacing="0">
                                                     <StackLayout Orientation="Horizontal">
-                                                        <Label Text="Czas wykonania: 50min"
+                                                        <Label Text="Czas wykonania: "
                                                                TextColor="{StaticResource TextSecondary}"
                                                                FontSize="13"/>
+                                                        <Label Text="{Binding FormattedTimeOfMakingTheRecipe}"
+                                                               TextColor="{StaticResource TextSecondary}"
+                                                               FontSize="13"
+                                                               FontAttributes="Italic, Bold"/>
                                                     </StackLayout>
                                                     <StackLayout Orientation="Horizontal" >
-                                                        <Label Text="Ilość porcji: 3"
+                                                        <Label Text="Ilość porcji: "
                                                                TextColor="{StaticResource TextSecondary}"
                                                                FontSize="13"/>
-                                                        <Label Text="12.09.2021"
+                                                        <Label Text="{Binding NumberOfServings}"
+                                                               TextColor="{StaticResource TextSecondary}"
+                                                               FontSize="13"
+                                                               FontAttributes="Italic, Bold"/>
+                                                        <Label Text="{Binding FormattedCreatedOn}"
                                                                TextColor="{StaticResource TextDisabled}"
                                                                FontSize="10"
                                                                HorizontalOptions="EndAndExpand"
