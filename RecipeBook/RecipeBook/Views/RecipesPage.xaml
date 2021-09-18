@@ -60,13 +60,85 @@
                                            Placeholder="Wyszukaj..."
                                            CancelButtonColor="{StaticResource TextPrimary}"
                                            BackgroundColor="{StaticResource BackgroundSecondary}"
-                                           Margin="5,0,5,0"/>
+                                           Margin="2,0,2,0"
+                                           Text="{Binding SearchResult}"/>
             
-            <RefreshView Grid.Row="1">
+            <RefreshView Grid.Row="1"
+                         IsRefreshing="{Binding IsRefreshing}"
+                         Command="{Binding Path=BindingContext.RefreshCommand, Source={x:Reference Recipes}}">
                 <CollectionView ItemsSource="{Binding Recipes}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+
+                                        <SwipeItemView Command="{Binding Path=BindingContext.DeleteShopCommand, Source={x:Reference Recipes}}"
+                                                       CommandParameter="{Binding .}"
+                                                       BackgroundColor="{StaticResource BackgroundPrimary}">
+                                            <Frame Padding="0"
+                                                   Background="Red"
+                                                   Opacity="0.9"
+                                                   CornerRadius="10"
+                                                   HasShadow="False"
+                                                   Margin="2.5,5,2.5,5"
+                                                   HorizontalOptions="CenterAndExpand">
+                                                <Frame  BackgroundColor="{StaticResource BackgroundPrimary}"
+                                                        Margin="2"
+                                                        CornerRadius="8"
+                                                        BorderColor="Red"
+                                                        HorizontalOptions="CenterAndExpand">
+                                                    <StackLayout Orientation="Horizontal"
+                                                                 HorizontalOptions="CenterAndExpand">
+                                                        <Image Source="delete.png"                                                             
+                                                               HeightRequest="20"
+                                                               WidthRequest="20"/>
+                                                        <Label Text="Usuń"
+                                                               FontSize="15"
+                                                               TextColor="{StaticResource TextPrimary}"
+                                                               VerticalTextAlignment="Center"
+                                                               HorizontalTextAlignment="Center"
+                                                               Margin="0,10,0,10"/>
+                                                    </StackLayout>
+                                                </Frame>
+                                            </Frame>
+                                        </SwipeItemView>
+
+                                        <SwipeItemView Command="{Binding Path=BindingContext.ExportShopCommand, Source={x:Reference Recipes}}"
+                                                       CommandParameter="{Binding .}"
+                                                       BackgroundColor="{StaticResource BackgroundPrimary}"
+                                                       Margin="0,0,5,0">
+                                            <Frame Padding="0"
+                                                   Background="#007BFF"
+                                                   Opacity="0.9"
+                                                   CornerRadius="10"
+                                                   HasShadow="False"
+                                                   Margin="2.5,5,2.5,5"
+                                                   HorizontalOptions="CenterAndExpand">
+                                                <Frame Margin="2" 
+                                                       BackgroundColor="{StaticResource BackgroundPrimary}"
+                                                       CornerRadius="8"
+                                                       BorderColor="#007BFF"
+                                                       HorizontalOptions="CenterAndExpand">
+                                                    <StackLayout Orientation="Horizontal"
+                                                                 HorizontalOptions="CenterAndExpand">
+                                                        <Image Source="edit.png"
+                                                               HeightRequest="20"
+                                                               WidthRequest="20"/>
+                                                        <Label FontSize="15"
+                                                               VerticalTextAlignment="Center"
+                                                               VerticalOptions="CenterAndExpand"
+                                                               HorizontalTextAlignment="Start"
+                                                               TextColor="{StaticResource TextPrimary}"
+                                                               Margin="0,10,5,10"
+                                                               Text="Edytuj">
+                                                        </Label>
+                                                    </StackLayout>
+                                                </Frame>
+                                            </Frame>
+                                        </SwipeItemView>
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
                                 <ContentView Padding="2,5,2,5"
                                              Background="#121212">
                                     <Frame Padding="7"
@@ -88,6 +160,10 @@
                                                     <Image HorizontalOptions="EndAndExpand"
                                                            HeightRequest="20"
                                                            VerticalOptions="Start">
+                                                        <Image.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.ChangeFavouriteStateCommand, Source={x:Reference Recipes}}"
+                                                                                  CommandParameter="{Binding .}"/>
+                                                        </Image.GestureRecognizers>
                                                         <Image.Style>
                                                             <Style TargetType="Image">
                                                                 <Setter Property="Source" Value="star.png"/>

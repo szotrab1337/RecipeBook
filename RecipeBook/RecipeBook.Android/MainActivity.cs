@@ -3,6 +3,7 @@ using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
+using Acr.UserDialogs;
 
 namespace RecipeBook.Droid
 {
@@ -19,6 +20,8 @@ namespace RecipeBook.Droid
 
             Window.SetNavigationBarColor(Android.Graphics.Color.Black);
             Window.SetStatusBarColor(Android.Graphics.Color.Black);
+
+            UserDialogs.Init(this);
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {

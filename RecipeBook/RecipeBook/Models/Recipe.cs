@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -9,6 +10,7 @@ namespace RecipeBook.Models
 {
     public class Recipe : BaseModel
     {
+        [PrimaryKey, AutoIncrement]
         public int RecipeId { get; set; }
 
         public string Name
@@ -53,6 +55,7 @@ namespace RecipeBook.Models
         }
         private string _PictureRaw;
 
+        [Ignore]
         public ImageSource Picture => string.IsNullOrEmpty(PictureRaw) ? null :
             ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(PictureRaw)));
 
@@ -63,6 +66,7 @@ namespace RecipeBook.Models
         }
         private bool _IsFavourite;
 
+        [Ignore]
         public ObservableCollection<Ingredient> Ingredients
         {
             get => _Ingredients;
@@ -70,6 +74,7 @@ namespace RecipeBook.Models
         }
         private ObservableCollection<Ingredient> _Ingredients;
         
+        [Ignore]
         public ObservableCollection<MakingStep> MakingSteps
         {
             get => _MakingSteps;
@@ -77,7 +82,10 @@ namespace RecipeBook.Models
         }
         private ObservableCollection<MakingStep> _MakingSteps;
 
+        [Ignore]
         public string FormattedTimeOfMakingTheRecipe => TimeOfMakingTheRecipe.TotalMinutes.ToString() + " min";
+
+        [Ignore]
         public string FormattedCreatedOn => CreatedOn.ToString(@"dd.MM.yyyy");
     }
 }

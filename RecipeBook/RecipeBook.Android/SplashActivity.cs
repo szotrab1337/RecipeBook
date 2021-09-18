@@ -28,7 +28,7 @@ namespace RecipeBook.Droid
 
         private async Task SimulateStartup()
         {
-            await Task.Delay(TimeSpan.FromSeconds(1));
+            await Task.Delay(TimeSpan.FromSeconds(0));
             StartActivity(new Intent(Application.Context, typeof(MainActivity)));
         }
     }
