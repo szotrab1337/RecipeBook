@@ -73,7 +73,7 @@
                                 <SwipeView.RightItems>
                                     <SwipeItems>
 
-                                        <SwipeItemView Command="{Binding Path=BindingContext.DeleteShopCommand, Source={x:Reference Recipes}}"
+                                        <SwipeItemView Command="{Binding Path=BindingContext.DeleteRecipeCommand, Source={x:Reference Recipes}}"
                                                        CommandParameter="{Binding .}"
                                                        BackgroundColor="{StaticResource BackgroundPrimary}">
                                             <Frame Padding="0"

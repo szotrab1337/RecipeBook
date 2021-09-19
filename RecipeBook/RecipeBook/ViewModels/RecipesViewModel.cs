@@ -18,12 +18,14 @@ namespace RecipeBook.ViewModels
 
             RefreshCommand = new Command(() => LoadRecipes());
             ChangeFavouriteStateCommand = new Command<Recipe>(ChangeFavouriteStateAction);
+            DeleteRecipeCommand = new Command<Recipe>(DeleteRecipeAction);
 
             SearchResult = string.Empty;
         }
 
         public ICommand RefreshCommand { get; set; }
         public ICommand ChangeFavouriteStateCommand { get; set; }
+        public ICommand DeleteRecipeCommand { get; set; }
 
         public ObservableCollection<Recipe> Recipes
         {
@@ -69,10 +71,43 @@ namespace RecipeBook.ViewModels
         {
             try
             {
+                if (clickedRecipe is null)
+                    return;
+
                 Recipe recipe = Recipes.FirstOrDefault(x => x.RecipeId == clickedRecipe.RecipeId);
                 recipe.IsFavourite = !recipe.IsFavourite;
 
                 await App.Database.UpdateRecipe(recipe);
+            }
+            catch (Exception ex)
+            {
+                UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
+            }
+        }
+
+        private async void DeleteRecipeAction(Recipe clickedRecipe)
+        {
+            try
+            {
+                if (clickedRecipe is null)
+                    return;
+
+                bool result = await UserDialogs.Instance.ConfirmAsync(new ConfirmConfig
+                {
+                    Message = $"Czy na pewno chcesz usunąć przepis \"{clickedRecipe.Name}\"?",
+                    OkText = "Tak",
+                    CancelText = "Nie",
+                    Title = "Potwierdzenie",
+                    AndroidStyleId = 2131689474
+                });
+
+                if (!result)
+                    return;
+
+                clickedRecipe.DeleteAssociatedItems();
+
+                Recipes.Remove(clickedRecipe);
+                await App.Database.DeleteRecipe(clickedRecipe);
             }
             catch (Exception ex)
             {

@@ -87,5 +87,37 @@ namespace RecipeBook.Models
 
         [Ignore]
         public string FormattedCreatedOn => CreatedOn.ToString(@"dd.MM.yyyy");
+
+        public void DeleteAssociatedItems()
+        {
+            DeleteMakingStepsList();
+            DeleteIngredientsList();
+        }
+
+        public void LoadAssociatedItems()
+        {
+            LoadMakingStepsList();
+            LoadIngredientsList();
+        }
+
+        public async void LoadMakingStepsList()
+        {
+            MakingSteps = new ObservableCollection<MakingStep>(await App.Database.GetMakingSteps(RecipeId));
+        }
+        
+        public async void LoadIngredientsList()
+        {
+            Ingredients = new ObservableCollection<Ingredient>(await App.Database.GetIngredients(RecipeId));
+        }
+        
+        public async void DeleteMakingStepsList()
+        {
+            await App.Database.DeleteMakingSteps(RecipeId);
+        }
+        
+        public async void DeleteIngredientsList()
+        {
+            await App.Database.DeleteIngredients(RecipeId);
+        }
     }
 }

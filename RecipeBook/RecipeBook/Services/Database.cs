@@ -16,7 +16,11 @@ namespace RecipeBook.Services
             _database = new SQLiteAsyncConnection(dbPath);
 
             _database.CreateTableAsync<Recipe>().Wait();
+            _database.CreateTableAsync<MakingStep>().Wait();
+            _database.CreateTableAsync<Ingredient>().Wait();
         }
+
+        #region Recipes
 
         public Task InsertRecipe(Recipe recipe)
         {
@@ -34,5 +38,60 @@ namespace RecipeBook.Services
         {
             return _database.UpdateAsync(recipe);
         }
+
+        public Task DeleteRecipe(Recipe recipe)
+        {
+            return _database.DeleteAsync(recipe);
+        }
+
+        #endregion
+
+        #region MakingSteps
+
+        public Task<List<MakingStep>> GetMakingSteps(Recipe recipe)
+        {
+            return _database.Table<MakingStep>().Where(x => x.RecipeId == recipe.RecipeId).ToListAsync();
+        }
+        
+        public Task<List<MakingStep>> GetMakingSteps(int recipeId)
+        {
+            return _database.Table<MakingStep>().Where(x => x.RecipeId == recipeId).ToListAsync();
+        }
+
+        public async Task DeleteMakingSteps(int recipeId)
+        {
+            List<MakingStep> makingStepsToDelete = await GetMakingSteps(recipeId);
+
+            foreach (MakingStep makingStep in makingStepsToDelete)
+            {
+                await _database.DeleteAsync(makingStep);
+            }
+        }
+
+        #endregion
+
+        #region Ingredients
+
+        public Task<List<Ingredient>> GetIngredients(Recipe recipe)
+        {
+            return _database.Table<Ingredient>().Where(x => x.RecipeId == recipe.RecipeId).ToListAsync();
+        }
+        
+        public Task<List<Ingredient>> GetIngredients(int recipeId)
+        {
+            return _database.Table<Ingredient>().Where(x => x.RecipeId == recipeId).ToListAsync();
+        }
+
+        public async Task DeleteIngredients(int recipeId)
+        {
+            List<Ingredient> ingredientsToDelete = await GetIngredients(recipeId);
+
+            foreach (Ingredient ingredient in ingredientsToDelete)
+            {
+                await _database.DeleteAsync(ingredient);
+            }
+        }
+
+        #endregion
     }
 }
