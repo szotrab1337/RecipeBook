@@ -38,6 +38,17 @@
             </Style>
             <Style TargetType="Label">
                 <Setter Property="TextColor" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="FontSize" Value="15"/>
+            </Style>
+            <Style TargetType="Entry">
+                <Setter Property="TextColor" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="PlaceholderColor" Value="{StaticResource TextDisabled}"/>
+                <Setter Property="Margin" Value="-5,-7,-5,5"/>
+            </Style>
+            <Style TargetType="Editor">
+                <Setter Property="TextColor" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="PlaceholderColor" Value="{StaticResource TextDisabled}"/>
+                <Setter Property="Margin" Value="-5,-7,-5,5"/>
             </Style>
         </ResourceDictionary>        
     </Application.Resources>

@@ -51,12 +51,12 @@ namespace RecipeBook.Models
         public string PictureRaw
         {
             get => _PictureRaw;
-            set { _PictureRaw = value; OnPropertyChanged("PictureRaw"); }
+            set { _PictureRaw = value; OnPropertyChanged("PictureRaw"); OnPropertyChanged("Picture"); }
         }
         private string _PictureRaw;
 
         [Ignore]
-        public ImageSource Picture => string.IsNullOrEmpty(PictureRaw) ? null :
+        public ImageSource Picture => string.IsNullOrEmpty(PictureRaw) ? ImageSource.FromResource("RecipeBook.Images.placeholder.png") :
             ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(PictureRaw)));
 
         public bool IsFavourite
@@ -118,6 +118,12 @@ namespace RecipeBook.Models
         public async void DeleteIngredientsList()
         {
             await App.Database.DeleteIngredients(RecipeId);
+        }
+
+        public Recipe()
+        {
+            CreatedOn = DateTime.Now;
+            IsFavourite = false;
         }
     }
 }

@@ -31,7 +31,8 @@ namespace RecipeBook.Services
         {
             bool dontUserFilter = string.IsNullOrWhiteSpace(filter);
 
-            return _database.Table<Recipe>().Where(x => dontUserFilter || x.Name.ToLower().Contains(filter)).ToListAsync();
+            return _database.Table<Recipe>().Where(x => dontUserFilter
+                        || x.Name.ToLower().Contains(filter)).OrderBy(x => x.Name).ToListAsync();
         }
 
         public Task UpdateRecipe(Recipe recipe)

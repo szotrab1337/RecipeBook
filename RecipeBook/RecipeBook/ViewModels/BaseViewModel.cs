@@ -11,6 +11,13 @@ namespace RecipeBook.ViewModels
     {
         public INavigation Navigation { get; set; }
 
+        public string Title
+        {
+            get { return _Title; }
+            set { _Title = value; OnPropertyChanged("Title"); }
+        }
+        public string _Title;
+
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {

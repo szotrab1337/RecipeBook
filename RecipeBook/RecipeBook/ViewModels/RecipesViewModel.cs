@@ -1,5 +1,6 @@
 ﻿using Acr.UserDialogs;
 using RecipeBook.Models;
+using RecipeBook.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,6 +20,9 @@ namespace RecipeBook.ViewModels
             RefreshCommand = new Command(() => LoadRecipes());
             ChangeFavouriteStateCommand = new Command<Recipe>(ChangeFavouriteStateAction);
             DeleteRecipeCommand = new Command<Recipe>(DeleteRecipeAction);
+            OpenRecipeCommand = new Command<Recipe>(OpenRecipeAction);
+            EditRecipeCommand = new Command<Recipe>(EditRecipeAction);
+            AddRecipeCommand = new Command(AddRecipeAction);
 
             SearchResult = string.Empty;
         }
@@ -26,6 +30,9 @@ namespace RecipeBook.ViewModels
         public ICommand RefreshCommand { get; set; }
         public ICommand ChangeFavouriteStateCommand { get; set; }
         public ICommand DeleteRecipeCommand { get; set; }
+        public ICommand OpenRecipeCommand { get; set; }
+        public ICommand EditRecipeCommand { get; set; }
+        public ICommand AddRecipeCommand { get; set; }
 
         public ObservableCollection<Recipe> Recipes
         {
@@ -108,6 +115,48 @@ namespace RecipeBook.ViewModels
 
                 Recipes.Remove(clickedRecipe);
                 await App.Database.DeleteRecipe(clickedRecipe);
+            }
+            catch (Exception ex)
+            {
+                UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
+            }
+        }
+
+        private void OpenRecipeAction(Recipe clickedRecipe)
+        {
+            try
+            {
+                if (clickedRecipe is null)
+                    return;
+
+                
+            }
+            catch (Exception ex)
+            {
+                UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
+            }
+        }
+        
+        private async void EditRecipeAction(Recipe clickedRecipe)
+        {
+            try
+            {
+                if (clickedRecipe is null)
+                    return;
+
+                await Navigation.PushAsync(new AddEditRecipePage(clickedRecipe));
+            }
+            catch (Exception ex)
+            {
+                UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
+            }
+        }
+        
+        private async void AddRecipeAction()
+        {
+            try
+            {
+                await Navigation.PushAsync(new AddEditRecipePage(null));
             }
             catch (Exception ex)
             {

@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RecipeBook.Views.AddEditRecipePage"
+             Background="#121212"
+             Title="{Binding Title}">
+    <Grid>
+        <ScrollView>
+            <StackLayout Orientation="Vertical">
+                <Grid RowDefinitions="Auto,Auto">
+                    <Image Source="{Binding Recipe.Picture}"
+                           Grid.Row="0"/>
+                    <ImageButton Source="editCircle.png"
+                                 Grid.Row="1" 
+                                 HeightRequest="55"
+                                 WidthRequest="55"
+                                 HorizontalOptions="End"
+                                 Margin="0,-35,15,0"
+                                 BackgroundColor="Transparent"/>
+                </Grid>
+                <Frame CornerRadius="5"
+                       BackgroundColor="{StaticResource BackgroundSecondary}"
+                       Margin="7">
+                    <StackLayout Orientation="Vertical"
+                                 Spacing="15">
+                        <StackLayout Orientation="Vertical">
+                            <Label Text="Nazwa"/>
+                            <Entry Placeholder="nazwa przepisu"
+                                   Keyboard="Chat"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal"
+                                     Spacing="25"
+                                     HorizontalOptions="FillAndExpand">
+                            <StackLayout Orientation="Vertical"
+                                         HorizontalOptions="FillAndExpand">
+                                <Label Text="Ilość porcji"/>
+                                <Entry Placeholder="ilość porcji (sztuk)"
+                                       Keyboard="Numeric"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Vertical"
+                                         HorizontalOptions="FillAndExpand">
+                                <Label Text="Czas wykonania"/>
+                                <Entry Placeholder="wykonanie (min)"
+                                       Keyboard="Numeric"/>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Vertical">
+                            <Label Text="Wskazówki"/>
+                            <Editor Placeholder="wskazówki dotyczące wykonania"
+                                    Keyboard="Chat"
+                                    VerticalOptions="FillAndExpand"
+                                    AutoSize="TextChanges"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Vertical">
+                            <Label Text="Składniki"/>
+                            <ListView>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackLayout>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

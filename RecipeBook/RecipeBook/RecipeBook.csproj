@@ -6,7 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\placeholder.png" />
     <None Remove="plus_svg.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Images\placeholder.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -24,6 +29,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Views\AddEditRecipePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\RecipesPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
