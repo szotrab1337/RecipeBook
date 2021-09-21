@@ -17,5 +17,31 @@ namespace RecipeBook.Models
             set { _Name = value; OnPropertyChanged("Name"); }
         }
         private string _Name;
+        
+        public int Number
+        {
+            get => _Number;
+            set { _Number = value; OnPropertyChanged("Number"); }
+        }
+        private int _Number;
+        
+        public double Quantity
+        {
+            get => _Quantity;
+            set { _Quantity = value; OnPropertyChanged("Quantity"); }
+        }
+        private double _Quantity;
+
+        public int? UnitId
+        {
+            get => _UnitId;
+            set { _UnitId = value; OnPropertyChanged("UnitId"); }
+        }
+        private int? _UnitId;
+
+        public string QuantityFormatted => UnitId is null ? string.Empty : Quantity.ToString() + " " + UnitBase.GetUnit(UnitId.Value);
+
+        [Ignore]
+        public string NumberFormatted => Number.ToString() + ".";
     }
 }

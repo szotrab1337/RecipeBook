@@ -2,8 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RecipeBook.Views.AddEditRecipePage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              Background="#121212"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             x:Name="AddEditRecipe">
     <Grid>
         <ScrollView>
             <StackLayout Orientation="Vertical">
@@ -16,7 +18,8 @@
                                  WidthRequest="55"
                                  HorizontalOptions="End"
                                  Margin="0,-35,15,0"
-                                 BackgroundColor="Transparent"/>
+                                 BackgroundColor="Transparent"
+                                 Command="{Binding ManagePictureCommand}"/>
                 </Grid>
                 <Frame CornerRadius="5"
                        BackgroundColor="{StaticResource BackgroundSecondary}"
@@ -52,16 +55,118 @@
                                     AutoSize="TextChanges"/>
                         </StackLayout>
                         <StackLayout Orientation="Vertical">
-                            <Label Text="Składniki"/>
-                            <ListView>
-                                <ListView.ItemTemplate>
+                            <StackLayout Orientation="Horizontal"
+                                         HorizontalOptions="FillAndExpand">
+                                <Label Text="Składniki"/>
+                                <Label HorizontalOptions="EndAndExpand"
+                                       Text="Dodaj"
+                                       TextColor="{StaticResource Primary}"
+                                       TextDecorations="Underline">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Path=BindingContext.AddNewIngredientCommand, Source={x:Reference AddEditRecipe}}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </StackLayout>
+                            <Label Text="Brak składników!"
+                                   HorizontalOptions="CenterAndExpand"
+                                   TextColor="{StaticResource TextSecondary}"
+                                   FontSize="18"
+                                   Margin="0,5,0,0">
+                                <Label.Style>
+                                    <Style TargetType="Label">
+                                        <Setter Property="IsVisible"
+                                                Value="False"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Recipe.Ingredients.Count}"
+                                                         Value="0"
+                                                         TargetType="Label">
+                                                <Setter Property="IsVisible"
+                                                        Value="True"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
+                            <StackLayout BindableLayout.ItemsSource="{Binding Recipe.Ingredients}"
+                                         Margin="0,5,0,0">
+                                <BindableLayout.ItemTemplate>
                                     <DataTemplate>
-                                        <ViewCell>
-                                            
-                                        </ViewCell>
+                                        <StackLayout Orientation="Horizontal"
+                                                     HorizontalOptions="FillAndExpand"
+                                                     VerticalOptions="Start"
+                                                     xct:TouchEffect.LongPressCommand="{Binding Path=BindingContext.ManageIngredientCommand, Source={x:Reference AddEditRecipe}}"
+                                                     xct:TouchEffect.CommandParameter="{Binding .}"
+                                                     xct:TouchEffect.LongPressDuration="600">
+                                            <Label Text="{Binding NumberFormatted}"
+                                                   TextColor="{StaticResource TextSecondary}"
+                                                   Margin="0,0,10,0"
+                                                   FontSize="17"/>
+                                            <Label Text="{Binding Name}"
+                                                   FontSize="17"
+                                                   Opacity="0.9"/>
+                                            <Label Text="{Binding QuantityFormatted}"
+                                                   HorizontalOptions="EndAndExpand"
+                                                   TextColor="{StaticResource TextDisabled}"/>
+                                        </StackLayout>
                                     </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
+                                </BindableLayout.ItemTemplate>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Vertical"
+                                     Margin="0,10,0,0">
+                            <StackLayout Orientation="Horizontal"
+                                         HorizontalOptions="FillAndExpand">
+                                <Label Text="Instrukcja wykonania"/>
+                                <Label HorizontalOptions="EndAndExpand"
+                                       Text="Dodaj"
+                                       TextColor="{StaticResource Primary}"
+                                       TextDecorations="Underline">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Path=BindingContext.AddNewMakingStepCommand, Source={x:Reference AddEditRecipe}}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </StackLayout>
+                            <Label Text="Brak kroków w instrukcji wykonania!"
+                                   HorizontalOptions="CenterAndExpand"
+                                   TextColor="{StaticResource TextSecondary}"
+                                   FontSize="18"
+                                   Margin="0,5,0,0">
+                                <Label.Style>
+                                    <Style TargetType="Label">
+                                        <Setter Property="IsVisible"
+                                                Value="False"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Recipe.MakingSteps.Count}"
+                                                         Value="0"
+                                                         TargetType="Label">
+                                                <Setter Property="IsVisible"
+                                                        Value="True"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
+                            <StackLayout BindableLayout.ItemsSource="{Binding Recipe.MakingSteps}"
+                                         Margin="0,5,0,0">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackLayout Orientation="Horizontal"
+                                                     HorizontalOptions="FillAndExpand"
+                                                     VerticalOptions="Start"
+                                                     xct:TouchEffect.LongPressCommand="{Binding Path=BindingContext.ManageMakingStepCommand, Source={x:Reference AddEditRecipe}}"
+                                                     xct:TouchEffect.CommandParameter="{Binding .}"
+                                                     xct:TouchEffect.LongPressDuration="600">
+                                            <Label Text="{Binding NumberFormatted}"
+                                                   TextColor="{StaticResource TextSecondary}"
+                                                   Margin="0,0,10,0"
+                                                   FontSize="17"/>
+                                            <Label Text="{Binding Name}"
+                                                   FontSize="17"
+                                                   Opacity="0.9"/>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </StackLayout>
                         </StackLayout>
                     </StackLayout>
                 </Frame>

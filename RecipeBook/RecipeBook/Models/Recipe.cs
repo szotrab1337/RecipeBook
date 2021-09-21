@@ -125,5 +125,11 @@ namespace RecipeBook.Models
             CreatedOn = DateTime.Now;
             IsFavourite = false;
         }
+
+        public void InitializeLists()
+        {
+            Ingredients = new ObservableCollection<Ingredient>();
+            MakingSteps = new ObservableCollection<MakingStep>();
+        }
     }
 }

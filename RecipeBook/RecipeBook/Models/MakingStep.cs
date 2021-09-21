@@ -17,5 +17,15 @@ namespace RecipeBook.Models
             set { _Name = value; OnPropertyChanged("Name"); }
         }
         private string _Name;
+
+        public int Number
+        {
+            get => _Number;
+            set { _Number = value; OnPropertyChanged("Number"); }
+        }
+        private int _Number;
+
+        [Ignore]
+        public string NumberFormatted => Number.ToString() + ".";
     }
 }
