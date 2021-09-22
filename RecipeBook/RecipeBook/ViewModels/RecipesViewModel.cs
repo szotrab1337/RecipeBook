@@ -66,6 +66,14 @@ namespace RecipeBook.ViewModels
             {
                 IsRefreshing = true;
                 Recipes = new ObservableCollection<Recipe>(await App.Database.GetRecipes(SearchResult.ToLower()));
+
+                Recipes.Add(new Recipe
+                {
+                    Name = "Test1",
+                    CreatedOn = DateTime.Now,
+                    RecipeId = 100,
+                    TimeOfMakingTheRecipe = new TimeSpan(0, 50, 0)
+                }); ;
                 IsRefreshing = false;
             }
             catch(Exception ex)

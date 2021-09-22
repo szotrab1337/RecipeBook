@@ -1,10 +1,14 @@
 ﻿using Acr.UserDialogs;
 using RecipeBook.Models;
+using RecipeBook.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Text;
 using System.Windows.Input;
+using Xamarin.CommunityToolkit.Extensions;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace RecipeBook.ViewModels
@@ -20,6 +24,8 @@ namespace RecipeBook.ViewModels
             ManageMakingStepCommand = new Command<MakingStep>(ManageMakingStepAction);
             ManageIngredientCommand = new Command<Ingredient>(ManageIngredientAction);
             ManagePictureCommand = new Command(ManagePictureAction);
+            RemovePictureCommand = new Command(RemovePictureAction);
+            SaveCommand = new Command(SaveAction);
 
             if (recipe is null)
             {
@@ -67,6 +73,8 @@ namespace RecipeBook.ViewModels
         public ICommand ManageMakingStepCommand { get; set; }
         public ICommand ManageIngredientCommand { get; set; }
         public ICommand ManagePictureCommand { get; set; }
+        public ICommand RemovePictureCommand { get; set; }
+        public ICommand SaveCommand { get; set; }
 
         public Recipe Recipe
         {
@@ -80,24 +88,129 @@ namespace RecipeBook.ViewModels
             UserDialogs.Instance.Alert("Siema");
         }
         
-        public void AddNewIngredientAction()
+        public async void AddNewIngredientAction()
         {
-            UserDialogs.Instance.Alert("Siema");
+            Ingredient ingredient = await Navigation.ShowPopupAsync(new AddEditIngredientPopup(null));
+
+            if (ingredient is null)
+                return;
+
+            ingredient.Number = Recipe.Ingredients.Count + 1;
+
+            Recipe.Ingredients.Add(ingredient);
         }
 
-        public void ManageMakingStepAction(MakingStep makingStep)
+        public async void ManageMakingStepAction(MakingStep makingStep)
         {
-            UserDialogs.Instance.Alert(makingStep.Name);
+            try
+            {
+                if (makingStep is null)
+                    return;
+
+                bool result = await UserDialogs.Instance.ConfirmAsync(new ConfirmConfig
+                {
+                    Message = $"Czy na pewno chcesz usunąć krok \"{makingStep.Name}\"?",
+                    OkText = "Tak",
+                    CancelText = "Anuluj",
+                    Title = "Potwierdzenie",
+                    AndroidStyleId = 2131689474
+                });
+
+                if (!result)
+                    return;
+
+                Recipe.DeleteMakingStep(makingStep);
+            }
+            catch (Exception ex)
+            {
+                UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
+            }
+        }
+
+        public async void ManageIngredientAction(Ingredient ingredient)
+        {
+            try
+            {
+                if (ingredient is null)
+                    return;
+
+                bool result = await UserDialogs.Instance.ConfirmAsync(new ConfirmConfig
+                {
+                    Message = $"Czy na pewno chcesz usunąć składnik \"{ingredient.Name}\"?",
+                    OkText = "Tak",
+                    CancelText = "Anuluj",
+                    Title = "Potwierdzenie",
+                    AndroidStyleId = 2131689474
+                });
+
+                if (!result)
+                    return;
+
+                Recipe.DeleteIngredient(ingredient);
+            }
+            catch (Exception ex)
+            {
+                UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
+            }
         }
         
-        public void ManageIngredientAction(Ingredient ingredient)
+        public async void ManagePictureAction()
         {
-            UserDialogs.Instance.Alert(ingredient.Name);
+            try
+            {
+                FileResult fileResult = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
+                {
+                    Title = "Wybierz zdjęcie"
+                });
+
+                if (fileResult is null)
+                    return;
+
+                Recipe.PictureRaw = PictureConverter.ImagePathToBase64(fileResult.FullPath);
+            }
+            catch (Exception ex)
+            {
+                UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
+            }
         }
         
-        public void ManagePictureAction()
+        public async void RemovePictureAction()
         {
-            UserDialogs.Instance.Alert("siema fotka");
+            try
+            {
+                if (string.IsNullOrWhiteSpace(Recipe.PictureRaw))
+                    return;
+
+                bool result = await UserDialogs.Instance.ConfirmAsync(new ConfirmConfig
+                {
+                    Message = "Czy na pewno chcesz usunąć obraz?",
+                    OkText = "Tak",
+                    CancelText = "Anuluj",
+                    Title = "Potwierdzenie",
+                    AndroidStyleId = 2131689474
+                });
+
+                if (!result)
+                    return;
+
+                Recipe.PictureRaw = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
+            }
+        }
+        
+        public void SaveAction()
+        {
+            try
+            {
+                UserDialogs.Instance.Alert("Działa");
+            }
+            catch (Exception ex)
+            {
+                UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
+            }
         }
     }
 }

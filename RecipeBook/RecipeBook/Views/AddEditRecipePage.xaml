@@ -6,12 +6,22 @@
              Background="#121212"
              Title="{Binding Title}"
              x:Name="AddEditRecipe">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Zapisz"
+                     Command="{Binding Path=BindingContext.SaveCommand, Source={x:Reference AddEditRecipe}}"/>
+    </ContentPage.ToolbarItems>
+    
     <Grid>
         <ScrollView>
             <StackLayout Orientation="Vertical">
                 <Grid RowDefinitions="Auto,Auto">
                     <Image Source="{Binding Recipe.Picture}"
-                           Grid.Row="0"/>
+                           Grid.Row="0"
+                           HeightRequest="300"
+                           Aspect="AspectFill"
+                           xct:TouchEffect.LongPressCommand="{Binding Path=BindingContext.RemovePictureCommand, Source={x:Reference AddEditRecipe}}"
+                           xct:TouchEffect.LongPressDuration="600"/>
                     <ImageButton Source="editCircle.png"
                                  Grid.Row="1" 
                                  HeightRequest="55"
@@ -23,7 +33,7 @@
                 </Grid>
                 <Frame CornerRadius="5"
                        BackgroundColor="{StaticResource BackgroundSecondary}"
-                       Margin="7">
+                       Margin="10">
                     <StackLayout Orientation="Vertical"
                                  Spacing="15">
                         <StackLayout Orientation="Vertical">

@@ -27,7 +27,7 @@
     </Shell.TitleView>
 
     <AbsoluteLayout>
-        <Grid Margin="5,10,5,10"
+        <Grid Margin="10"
               AbsoluteLayout.LayoutFlags="All"
               AbsoluteLayout.LayoutBounds="0,0,1,1"
               RowDefinitions="Auto,*">

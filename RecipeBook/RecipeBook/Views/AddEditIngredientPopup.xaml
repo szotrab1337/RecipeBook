@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xct:Popup xmlns="http://xamarin.com/schemas/2014/forms"
+           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+           x:Class="RecipeBook.Views.AddEditIngredientPopup"
+           xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+           xmlns:local="clr-namespace:RecipeBook.Models"
+           x:TypeArguments="local:Ingredient"
+           IsLightDismissEnabled="False"
+           Size="300,300">
+    <Frame BackgroundColor="{StaticResource BackgroundPrimary}"
+               HorizontalOptions="FillAndExpand"
+               VerticalOptions="FillAndExpand"
+           CornerRadius="0"
+           Padding="30">
+        <StackLayout Orientation="Vertical"
+                     Spacing="15"
+                     VerticalOptions="CenterAndExpand"
+                     HorizontalOptions="CenterAndExpand">
+            <StackLayout Orientation="Vertical">
+                <Label Text="Nazwa"/>
+                <Entry Placeholder="nazwa składnika"
+                       Keyboard="Chat"
+                       TextChanged="Name_Changed"
+                       x:Name="Name"/>
+            </StackLayout>
+            <StackLayout Orientation="Vertical">
+                <Label Text="Ilość"/>
+                <Grid ColumnDefinitions="*,*">
+                    <Entry Placeholder="ilość"
+                           Keyboard="Numeric"
+                           Grid.Column="0"
+                           Margin="0,0,10,0"
+                           TextChanged="Quantity_Changed"
+                           x:Name="Quantity"/>
+                    <Picker Title="Jednostka"
+                            Grid.Column="1"
+                            SelectedIndexChanged="Unit_Changed"
+                            x:Name="Units"
+                            ItemDisplayBinding="{Binding Name}"/>
+                </Grid>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="FillAndExpand"
+                         Spacing="15"
+                         Margin="0,15,0,0">
+                <Button Text="Anuluj"
+                        HorizontalOptions="FillAndExpand"
+                        BackgroundColor="#DC3545"
+                        Clicked="Cancel_Clicked"/>
+                <Button Text="Zapisz"
+                        HorizontalOptions="FillAndExpand"
+                        BackgroundColor="#55B155"
+                        Clicked="Confirm_Clicked"
+                        x:Name="Confirm_Button"/>
+            </StackLayout>
+        </StackLayout>
+    </Frame>
+</xct:Popup>

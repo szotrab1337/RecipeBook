@@ -44,11 +44,19 @@
                 <Setter Property="TextColor" Value="{StaticResource TextPrimary}"/>
                 <Setter Property="PlaceholderColor" Value="{StaticResource TextDisabled}"/>
                 <Setter Property="Margin" Value="-5,-7,-5,5"/>
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
             </Style>
             <Style TargetType="Editor">
                 <Setter Property="TextColor" Value="{StaticResource TextPrimary}"/>
                 <Setter Property="PlaceholderColor" Value="{StaticResource TextDisabled}"/>
                 <Setter Property="Margin" Value="-5,-7,-5,5"/>
+            </Style>
+            <Style TargetType="Picker">
+                <Setter Property="TextColor" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="TitleColor" Value="{StaticResource TextPrimary}"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource BackgroundPrimary}"/>
             </Style>
         </ResourceDictionary>        
     </Application.Resources>

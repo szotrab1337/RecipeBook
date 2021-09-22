@@ -21,16 +21,16 @@ namespace RecipeBook.Models
         public int Number
         {
             get => _Number;
-            set { _Number = value; OnPropertyChanged("Number"); }
+            set { _Number = value; OnPropertyChanged("Number"); Validate(); }
         }
         private int _Number;
         
-        public double Quantity
+        public double? Quantity
         {
             get => _Quantity;
-            set { _Quantity = value; OnPropertyChanged("Quantity"); }
+            set { _Quantity = value; OnPropertyChanged("Quantity"); Validate(); }
         }
-        private double _Quantity;
+        private double? _Quantity;
 
         public int? UnitId
         {
@@ -39,9 +39,24 @@ namespace RecipeBook.Models
         }
         private int? _UnitId;
 
-        public string QuantityFormatted => UnitId is null ? string.Empty : Quantity.ToString() + " " + UnitBase.GetUnit(UnitId.Value);
+        public string QuantityFormatted => UnitId is null || !Quantity.HasValue ? string.Empty : Quantity.ToString() + " " + UnitBase.GetUnit(UnitId.Value);
 
         [Ignore]
         public string NumberFormatted => Number.ToString() + ".";
+
+        [Ignore]
+        public bool IsValid { get; set; }
+
+        public void Validate()
+        {
+            if (string.IsNullOrWhiteSpace(Name))
+                IsValid = false;
+
+            if(Quantity != null)
+                if (Quantity.Value < 0)
+                    IsValid = false;
+
+            IsValid = true;
+        }
     }
 }

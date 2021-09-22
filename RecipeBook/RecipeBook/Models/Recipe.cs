@@ -51,13 +51,16 @@ namespace RecipeBook.Models
         public string PictureRaw
         {
             get => _PictureRaw;
-            set { _PictureRaw = value; OnPropertyChanged("PictureRaw"); OnPropertyChanged("Picture"); }
+            set { _PictureRaw = value; OnPropertyChanged("PictureRaw"); OnPropertyChanged("Picture"); OnPropertyChanged("IsDefaultPicture"); }
         }
         private string _PictureRaw;
 
         [Ignore]
         public ImageSource Picture => string.IsNullOrEmpty(PictureRaw) ? ImageSource.FromResource("RecipeBook.Images.placeholder.png") :
-            ImageSource.FromStream(() => new MemoryStream(Convert.FromBase64String(PictureRaw)));
+                                        PictureConverter.Base64ToImage(PictureRaw);
+
+        [Ignore]
+        public bool IsDefaultPicture => string.IsNullOrEmpty(PictureRaw) ? true : false;
 
         public bool IsFavourite
         {
@@ -131,5 +134,24 @@ namespace RecipeBook.Models
             Ingredients = new ObservableCollection<Ingredient>();
             MakingSteps = new ObservableCollection<MakingStep>();
         }
+
+        public async void DeleteIngredient(Ingredient ingredient)
+        {
+            await App.Database.DeleteIngredient(ingredient);
+            Ingredients.Remove(ingredient);
+        }
+
+        public async void DeleteMakingStep(MakingStep makingStep)
+        {
+            await App.Database.DeleteMakingStep(makingStep);
+            MakingSteps.Remove(makingStep);
+        }
+        
+        public async void AddNewIngredient(Ingredient ingredient)
+        {
+            await App.Database.InsertIngredient(ingredient);
+            Ingredients.Add(ingredient);
+        }
+
     }
 }

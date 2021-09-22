@@ -69,6 +69,11 @@ namespace RecipeBook.Services
             }
         }
 
+        public async Task DeleteMakingStep(MakingStep makingStep)
+        {
+            await _database.DeleteAsync(makingStep);
+        }
+
         #endregion
 
         #region Ingredients
@@ -91,6 +96,16 @@ namespace RecipeBook.Services
             {
                 await _database.DeleteAsync(ingredient);
             }
+        }
+
+        public async Task DeleteIngredient(Ingredient ingredient)
+        {
+            await _database.DeleteAsync(ingredient);
+        }
+
+        public async Task InsertIngredient(Ingredient ingredient)
+        {
+            await _database.InsertAsync(ingredient);
         }
 
         #endregion
