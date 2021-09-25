@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Input;
 using Xamarin.CommunityToolkit.Extensions;
 using Xamarin.Essentials;
@@ -24,7 +26,6 @@ namespace RecipeBook.ViewModels
             ManageMakingStepCommand = new Command<MakingStep>(ManageMakingStepAction);
             ManageIngredientCommand = new Command<Ingredient>(ManageIngredientAction);
             ManagePictureCommand = new Command(ManagePictureAction);
-            RemovePictureCommand = new Command(RemovePictureAction);
             SaveCommand = new Command(SaveAction);
 
             if (recipe is null)
@@ -73,7 +74,6 @@ namespace RecipeBook.ViewModels
         public ICommand ManageMakingStepCommand { get; set; }
         public ICommand ManageIngredientCommand { get; set; }
         public ICommand ManagePictureCommand { get; set; }
-        public ICommand RemovePictureCommand { get; set; }
         public ICommand SaveCommand { get; set; }
 
         public Recipe Recipe
@@ -134,6 +134,33 @@ namespace RecipeBook.ViewModels
                 if (ingredient is null)
                     return;
 
+                List<string> choices = new List<string>
+                {
+                    "Edytuj",
+                    "Usuń"
+                };
+
+                string result = await UserDialogs.Instance.ActionSheetAsync("Wybierz...", string.Empty, "Anuluj", CancellationToken.None, choices.ToArray());
+
+                if (result.Equals("Anuluj") || string.IsNullOrWhiteSpace(result))
+                    return;
+
+                if (result.Equals("Edytuj"))
+                    EditIngredient(ingredient);
+
+                if (result.Equals("Usuń"))
+                    RemoveIngredient(ingredient);
+            }
+            catch (Exception ex)
+            {
+                UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
+            }
+        }
+
+        private async void RemoveIngredient(Ingredient ingredient)
+        {
+            try
+            {
                 bool result = await UserDialogs.Instance.ConfirmAsync(new ConfirmConfig
                 {
                     Message = $"Czy na pewno chcesz usunąć składnik \"{ingredient.Name}\"?",
@@ -153,8 +180,52 @@ namespace RecipeBook.ViewModels
                 UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
             }
         }
+
+        private async void EditIngredient(Ingredient ingredient)
+        {
+            try
+            {
+                ingredient = await Navigation.ShowPopupAsync(new AddEditIngredientPopup(ingredient));
+
+                Ingredient ingredient1 = Recipe.Ingredients.FirstOrDefault(x => x.IngredientId == ingredient.IngredientId);
+                ingredient1 = ingredient;
+            }
+            catch (Exception ex)
+            {
+                UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
+            }
+        }
         
         public async void ManagePictureAction()
+        {
+            try
+            {
+                List<string> choices = new List<string>
+                {
+                    "Wybierz zdjęcie"
+                };
+
+                if (!Recipe.IsDefaultPicture)
+                    choices.Add("Usuń zdjęcie");
+
+                string result = await UserDialogs.Instance.ActionSheetAsync("Wybierz...", string.Empty, "Anuluj", CancellationToken.None, choices.ToArray());
+
+                if (result.Equals("Anuluj") || string.IsNullOrWhiteSpace(result))
+                    return;
+
+                if (result.Equals("Wybierz zdjęcie"))
+                    PickNewPicture();
+
+                if (result.Equals("Usuń zdjęcie"))
+                    RemovePicture();       
+            }
+            catch (Exception ex)
+            {
+                UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
+            }
+        }
+
+        private async void PickNewPicture()
         {
             try
             {
@@ -173,8 +244,8 @@ namespace RecipeBook.ViewModels
                 UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
             }
         }
-        
-        public async void RemovePictureAction()
+
+        private async void RemovePicture()
         {
             try
             {

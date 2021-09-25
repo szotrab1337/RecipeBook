@@ -20,7 +20,7 @@
                            Grid.Row="0"
                            HeightRequest="300"
                            Aspect="AspectFill"
-                           xct:TouchEffect.LongPressCommand="{Binding Path=BindingContext.RemovePictureCommand, Source={x:Reference AddEditRecipe}}"
+                           xct:TouchEffect.LongPressCommand="{Binding Path=BindingContext.ManagePictureCommand, Source={x:Reference AddEditRecipe}}"
                            xct:TouchEffect.LongPressDuration="600"/>
                     <ImageButton Source="editCircle.png"
                                  Grid.Row="1" 

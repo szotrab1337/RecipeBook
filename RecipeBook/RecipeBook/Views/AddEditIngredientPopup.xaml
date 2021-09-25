@@ -51,7 +51,8 @@
                         HorizontalOptions="FillAndExpand"
                         BackgroundColor="#55B155"
                         Clicked="Confirm_Clicked"
-                        x:Name="Confirm_Button"/>
+                        x:Name="Confirm_Button"
+                        Background="#55B155"/>
             </StackLayout>
         </StackLayout>
     </Frame>

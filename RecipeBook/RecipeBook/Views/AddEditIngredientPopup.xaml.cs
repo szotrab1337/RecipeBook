@@ -18,13 +18,20 @@ namespace RecipeBook.Views
         {
             InitializeComponent();
 
-            if(ingredient is null)
-                Ingredient = new Ingredient();
-            else
-                Ingredient = ingredient;
-
             Units.ItemsSource = UnitBase.GetUnits();
-            Units.SelectedIndex = 0;
+
+            if (ingredient is null)
+            {
+                Ingredient = new Ingredient();
+                Units.SelectedIndex = 0;
+            }
+            else
+            {
+                Ingredient = ingredient;
+                Name.Text = ingredient.Name;
+                Quantity.Text = !ingredient.Quantity.HasValue ? string.Empty : ingredient.Quantity.ToString();
+                Units.SelectedIndex = !ingredient.UnitId.HasValue ? 0 : ingredient.UnitId.Value - 1;
+            }
 
             Confirm_Button.IsEnabled = Ingredient.IsValid;
         }
