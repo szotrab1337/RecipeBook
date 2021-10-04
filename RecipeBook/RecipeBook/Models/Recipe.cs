@@ -147,9 +147,11 @@ namespace RecipeBook.Models
             MakingSteps.Remove(makingStep);
         }
         
-        public async void AddNewIngredient(Ingredient ingredient)
+        public async void AddIngredient(Ingredient ingredient)
         {
-            await App.Database.InsertIngredient(ingredient);
+            if(RecipeId > 0)
+                await App.Database.InsertIngredient(ingredient);
+
             Ingredients.Add(ingredient);
         }
 

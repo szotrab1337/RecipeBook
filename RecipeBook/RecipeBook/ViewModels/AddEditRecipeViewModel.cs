@@ -33,39 +33,12 @@ namespace RecipeBook.ViewModels
                 Recipe = new Recipe();
                 Title = "Nowy przepis";
                 Recipe.InitializeLists();
-                Recipe.Ingredients.Add(new Ingredient()
-                {
-                    IngredientId = 1,
-                    Name = "Cebula",
-                    Number = 1,
-                    UnitId = 1,
-                    Quantity = 2
-                });
-                Recipe.Ingredients.Add(new Ingredient()
-                {
-                    IngredientId = 2,
-                    Name = "Masło",
-                    Number = 2
-                });
-
-                Recipe.MakingSteps.Add(new MakingStep()
-                {
-                    MakingStepId = 1,
-                    Number = 1,
-                    Name = "Pokroić mięso w kostkę"
-                });
-                
-                Recipe.MakingSteps.Add(new MakingStep()
-                {
-                    MakingStepId = 2,
-                    Number = 2,
-                    Name = "Obrać cebulę"
-                });
             }
             else
             {
                 Recipe = recipe;
                 Title = "Edycja przepisu";
+                Recipe.LoadAssociatedItems();
             }
         }
 
@@ -83,9 +56,9 @@ namespace RecipeBook.ViewModels
         }
         private Recipe _Recipe;
 
-        public void AddNewMakingStepAction()
+        public async void AddNewMakingStepAction()
         {
-            UserDialogs.Instance.Alert("Siema");
+            MakingStep making = await Navigation.ShowPopupAsync(new AddEditMakingStepPopup(null));
         }
         
         public async void AddNewIngredientAction()
@@ -97,7 +70,7 @@ namespace RecipeBook.ViewModels
 
             ingredient.Number = Recipe.Ingredients.Count + 1;
 
-            Recipe.Ingredients.Add(ingredient);
+            Recipe.AddIngredient(ingredient);
         }
 
         public async void ManageMakingStepAction(MakingStep makingStep)
@@ -276,7 +249,7 @@ namespace RecipeBook.ViewModels
         {
             try
             {
-                UserDialogs.Instance.Alert("Działa");
+                
             }
             catch (Exception ex)
             {
