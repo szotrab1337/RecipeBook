@@ -16,6 +16,8 @@ namespace RecipeBook.Models
                 return;
 
             changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+            //siema
         }
     }
 }
