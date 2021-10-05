@@ -39,22 +39,25 @@
                         <StackLayout Orientation="Vertical">
                             <Label Text="Nazwa"/>
                             <Entry Placeholder="nazwa przepisu"
-                                   Keyboard="Chat"/>
+                                   Keyboard="Chat"
+                                   Text="{Binding Recipe.Name}"/>
                         </StackLayout>
                         <StackLayout Orientation="Horizontal"
                                      Spacing="25"
                                      HorizontalOptions="FillAndExpand">
                             <StackLayout Orientation="Vertical"
                                          HorizontalOptions="FillAndExpand">
-                                <Label Text="Ilość porcji"/>
+                                <Label Text="Ilość porcji (szt)"/>
                                 <Entry Placeholder="ilość porcji (sztuk)"
-                                       Keyboard="Numeric"/>
+                                       Keyboard="Numeric"
+                                       Text="{Binding Recipe.NumberOfServingsInput}"/>
                             </StackLayout>
                             <StackLayout Orientation="Vertical"
                                          HorizontalOptions="FillAndExpand">
-                                <Label Text="Czas wykonania"/>
+                                <Label Text="Czas wykonania (min)"/>
                                 <Entry Placeholder="wykonanie (min)"
-                                       Keyboard="Numeric"/>
+                                       Keyboard="Numeric"
+                                       Text="{Binding Recipe.TimeOfMakingTheRecipeInput}"/>
                             </StackLayout>
                         </StackLayout>
                         <StackLayout Orientation="Vertical">
@@ -62,7 +65,8 @@
                             <Editor Placeholder="wskazówki dotyczące wykonania"
                                     Keyboard="Chat"
                                     VerticalOptions="FillAndExpand"
-                                    AutoSize="TextChanges"/>
+                                    AutoSize="TextChanges"
+                                    Text="{Binding Recipe.Hints}"/>
                         </StackLayout>
                         <StackLayout Orientation="Vertical">
                             <StackLayout Orientation="Horizontal"

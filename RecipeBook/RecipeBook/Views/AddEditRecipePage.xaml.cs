@@ -21,5 +21,8 @@ namespace RecipeBook.Views
             InitializeComponent();
             BindingContext = viewModel = new AddEditRecipeViewModel(Navigation, recipe);
         }
+
+        public delegate void HandlePopDelegate(string parameter);
+        public event HandlePopDelegate DidFinishPoping;
     }
 }

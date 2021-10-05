@@ -39,6 +39,7 @@ namespace RecipeBook.ViewModels
                 Recipe = recipe;
                 Title = "Edycja przepisu";
                 Recipe.LoadAssociatedItems();
+                Recipe.PrepareToEdit();
             }
         }
 
@@ -56,12 +57,17 @@ namespace RecipeBook.ViewModels
         }
         private Recipe _Recipe;
 
-        public async void AddNewMakingStepAction()
+        private async void AddNewMakingStepAction()
         {
-            MakingStep making = await Navigation.ShowPopupAsync(new AddEditMakingStepPopup(null));
+            MakingStep makingStep = await Navigation.ShowPopupAsync(new AddEditMakingStepPopup(null));
+
+            if (makingStep is null)
+                return;
+
+            Recipe.AddMakingStep(makingStep);
         }
         
-        public async void AddNewIngredientAction()
+        private async void AddNewIngredientAction()
         {
             Ingredient ingredient = await Navigation.ShowPopupAsync(new AddEditIngredientPopup(null));
 
@@ -73,7 +79,7 @@ namespace RecipeBook.ViewModels
             Recipe.AddIngredient(ingredient);
         }
 
-        public async void ManageMakingStepAction(MakingStep makingStep)
+        private async void ManageMakingStepAction(MakingStep makingStep)
         {
             try
             {
@@ -92,6 +98,8 @@ namespace RecipeBook.ViewModels
                 if (!result)
                     return;
 
+                makingStep.Number = Recipe.MakingSteps.Count + 1;
+
                 Recipe.DeleteMakingStep(makingStep);
             }
             catch (Exception ex)
@@ -100,7 +108,7 @@ namespace RecipeBook.ViewModels
             }
         }
 
-        public async void ManageIngredientAction(Ingredient ingredient)
+        private async void ManageIngredientAction(Ingredient ingredient)
         {
             try
             {
@@ -169,7 +177,7 @@ namespace RecipeBook.ViewModels
             }
         }
         
-        public async void ManagePictureAction()
+        private async void ManagePictureAction()
         {
             try
             {
@@ -245,11 +253,17 @@ namespace RecipeBook.ViewModels
             }
         }
         
-        public void SaveAction()
+        private async void SaveAction()
         {
             try
             {
-                
+                if (Recipe.RecipeId > 0)
+                    Recipe.UpdateRecipe();
+                else
+                    Recipe.AddNewRecipe();
+
+                MessagingCenter.Send(this, "LoadRecipes");
+                await Navigation.PopAsync();
             }
             catch (Exception ex)
             {

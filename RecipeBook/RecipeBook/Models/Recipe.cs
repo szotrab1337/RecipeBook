@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using Xamarin.Forms;
 
 namespace RecipeBook.Models
@@ -34,12 +35,35 @@ namespace RecipeBook.Models
         }
         private TimeSpan _TimeOfMakingTheRecipe;
         
+        [Ignore]
+        public string TimeOfMakingTheRecipeInput
+        {
+            get => _TimeOfMakingTheRecipeInput;
+            set
+            {
+                _TimeOfMakingTheRecipeInput = value; OnPropertyChanged("TimeOfMakingTheRecipeInput");
+                ValidateTimeOfMakingTheRecipeInput();
+            }
+        }
+        private string _TimeOfMakingTheRecipeInput;
+        
         public double NumberOfServings
         {
             get => _NumberOfServings;
             set { _NumberOfServings = value; OnPropertyChanged("NumberOfServings"); }
         }
         private double _NumberOfServings;
+        
+        public string NumberOfServingsInput
+        {
+            get => _NumberOfServingsInput;
+            set
+            {
+                _NumberOfServingsInput = value; OnPropertyChanged("NumberOfServingsInput");
+                ValidateServingsInput();
+            }
+        }
+        private string _NumberOfServingsInput;
         
         public DateTime CreatedOn
         {
@@ -54,6 +78,9 @@ namespace RecipeBook.Models
             set { _PictureRaw = value; OnPropertyChanged("PictureRaw"); OnPropertyChanged("Picture"); OnPropertyChanged("IsDefaultPicture"); }
         }
         private string _PictureRaw;
+
+        [Ignore]
+        private string ValidateMessage { get; set; }
 
         [Ignore]
         public ImageSource Picture => string.IsNullOrEmpty(PictureRaw) ? ImageSource.FromResource("RecipeBook.Images.placeholder.png") :
@@ -150,10 +177,88 @@ namespace RecipeBook.Models
         public async void AddIngredient(Ingredient ingredient)
         {
             if(RecipeId > 0)
+            {
+                ingredient.RecipeId = RecipeId;
                 await App.Database.InsertIngredient(ingredient);
+            }
 
             Ingredients.Add(ingredient);
         }
 
+        public async void AddMakingStep(MakingStep makingStep)
+        {
+            if(RecipeId > 0)
+            {
+                makingStep.RecipeId = RecipeId;
+                await App.Database.InsertMakingStep(makingStep);
+            }
+
+            MakingSteps.Add(makingStep);
+        }
+
+        public bool ValidateRecipe()
+        {
+            if (string.IsNullOrWhiteSpace(Name))
+            {
+                ValidateMessage = "Nazwa nie może być pusta!";
+                return false;
+            }
+
+            if (NumberOfServings <= 0)
+            {
+                ValidateMessage = "Wprowadź ilość porcji!";
+                return false;
+            }
+
+            if(TimeOfMakingTheRecipe.TotalMinutes <= 0)
+            {
+                ValidateMessage = "Wprowadź czas wykonania!";
+                return false;
+            }
+
+            return true;
+        }
+
+        public void PrepareToEdit()
+        {
+            NumberOfServingsInput = NumberOfServings.ToString();
+            TimeOfMakingTheRecipeInput = TimeOfMakingTheRecipe.TotalMinutes.ToString();
+        }
+
+        private void ValidateServingsInput()
+        {
+            if (string.IsNullOrWhiteSpace(NumberOfServingsInput))
+                return;
+
+            Regex patternRegex = new Regex("^([1-9][0-9]{0,2}|1000)$");
+
+            if (!patternRegex.IsMatch(NumberOfServingsInput))
+                NumberOfServingsInput = NumberOfServingsInput.Substring(0, NumberOfServingsInput.Length - 1);
+            else
+                NumberOfServings = Convert.ToInt32(NumberOfServingsInput);
+        }
+        
+        private void ValidateTimeOfMakingTheRecipeInput()
+        {
+            if (string.IsNullOrWhiteSpace(TimeOfMakingTheRecipeInput))
+                return;
+
+            Regex patternRegex = new Regex("^([1-9][0-9]{0,2}|1000)$");
+
+            if (!patternRegex.IsMatch(TimeOfMakingTheRecipeInput))
+                TimeOfMakingTheRecipeInput = TimeOfMakingTheRecipeInput.Substring(0, TimeOfMakingTheRecipeInput.Length - 1);
+            else
+                TimeOfMakingTheRecipe = new TimeSpan(0, Convert.ToInt32(TimeOfMakingTheRecipeInput), 0);
+        }
+
+        public async void UpdateRecipe()
+        {
+            await App.Database.UpdateRecipe(this);
+        }
+
+        public void AddNewRecipe()
+        {
+
+        }
     }
 }

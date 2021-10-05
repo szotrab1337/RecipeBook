@@ -16,13 +16,25 @@ namespace RecipeBook.Views
         public AddEditMakingStepPopup(MakingStep makingStep)
         {
             InitializeComponent();
+
+            if(makingStep is null)
+            {
+                MakingStep = new MakingStep();
+            }
+            else
+            {
+                MakingStep = makingStep;
+                Name.Text = makingStep.Name;
+            }
+
+            Confirm_Button.IsEnabled = !string.IsNullOrWhiteSpace(Name.Text);
         }
 
         public MakingStep MakingStep { get; set; }
 
         private void Name_TextChanged(object sender, TextChangedEventArgs e)
         {
-            maki
+            MakingStep.Name = Name.Text;
             Confirm_Button.IsEnabled = !string.IsNullOrWhiteSpace(Name.Text);
         }
 
@@ -31,9 +43,9 @@ namespace RecipeBook.Views
             Dismiss(null);
         }
 
-        private void Confirm_Button_Clicked(object sender, EventArgs e)
+        private void Confirm_Clicked(object sender, EventArgs e)
         {
-            Dismiss()
+            Dismiss(MakingStep);
         }
     }
 }

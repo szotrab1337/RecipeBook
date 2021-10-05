@@ -25,6 +25,7 @@ namespace RecipeBook.ViewModels
             AddRecipeCommand = new Command(AddRecipeAction);
 
             SearchResult = string.Empty;
+            MessagingCenter.Subscribe<AddEditRecipeViewModel>(this, "LoadRecipes", (LoadAgain) => { LoadRecipes(); });
         }
 
         public ICommand RefreshCommand { get; set; }
@@ -153,6 +154,7 @@ namespace RecipeBook.ViewModels
                     return;
 
                 await Navigation.PushAsync(new AddEditRecipePage(clickedRecipe));
+                LoadRecipes();
             }
             catch (Exception ex)
             {

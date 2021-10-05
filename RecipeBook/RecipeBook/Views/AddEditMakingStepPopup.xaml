@@ -5,6 +5,7 @@
            xmlns:local="clr-namespace:RecipeBook.Models"
            xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
            x:TypeArguments="local:MakingStep"
+           IsLightDismissEnabled="False"
            Size="300,300">
     
     <Frame BackgroundColor="{StaticResource BackgroundPrimary}"
@@ -23,7 +24,8 @@
                        Keyboard="Chat"
                        VerticalOptions="FillAndExpand"
                        AutoSize="TextChanges"
-                       x:Name="Name"/>
+                       x:Name="Name"
+                       TextChanged="Name_TextChanged"/>
             </StackLayout>
             <StackLayout Orientation="Horizontal"
                          HorizontalOptions="FillAndExpand"
@@ -32,12 +34,14 @@
                          Margin="0,15,0,0">
                 <Button Text="Anuluj"
                         HorizontalOptions="FillAndExpand"
-                        BackgroundColor="#DC3545"/>
+                        BackgroundColor="#DC3545"
+                        Clicked="Cancel_Clicked"/>
                 <Button Text="Zapisz"
                         HorizontalOptions="FillAndExpand"
                         BackgroundColor="#55B155"
                         x:Name="Confirm_Button"
-                        Background="#55B155"/>
+                        Background="#55B155"
+                        Clicked="Confirm_Clicked"/>
             </StackLayout>
         </StackLayout>
     </Frame>
