@@ -60,7 +60,7 @@
                             </StackLayout>
                             <StackLayout Orientation="Vertical"
                                          HorizontalOptions="FillAndExpand">
-                                <Label Text="Czas wykonania (min)"/>
+                                <Label Text="Wykonanie (min)"/>
                                 <Entry Placeholder="wykonanie (min)"
                                        Keyboard="Numeric"
                                        Text="{Binding Recipe.TimeOfMakingTheRecipeInput}"/>
