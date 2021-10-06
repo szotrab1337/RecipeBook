@@ -3,9 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RecipeBook.Views.AddEditRecipePage"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:local="clr-namespace:RecipeBook.CustomRenders"
              Background="#121212"
              Title="{Binding Title}"
              x:Name="AddEditRecipe">
+
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior BindingContext="{Binding BindingContext, Source={x:Reference AddEditRecipe}}"
+                            Command="{Binding ConfirmLeaveCommand}"/>
+    </Shell.BackButtonBehavior>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Zapisz"

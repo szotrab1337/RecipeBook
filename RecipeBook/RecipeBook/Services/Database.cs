@@ -35,6 +35,11 @@ namespace RecipeBook.Services
                         || x.Name.ToLower().Contains(filter)).OrderBy(x => x.Name).ToListAsync();
         }
 
+        public int GetLastRecipeId()
+        {
+            return _database.Table<Recipe>().OrderByDescending(x => x.RecipeId).FirstOrDefaultAsync().Result.RecipeId;
+        }
+
         public Task UpdateRecipe(Recipe recipe)
         {
             return _database.UpdateAsync(recipe);
@@ -79,6 +84,11 @@ namespace RecipeBook.Services
             await _database.InsertAsync(makingStep);
         }
 
+        public async Task UpdateMakingStep(MakingStep makingStep)
+        {
+            await _database.UpdateAsync(makingStep);
+        }
+
         #endregion
 
         #region Ingredients
@@ -111,6 +121,11 @@ namespace RecipeBook.Services
         public async Task InsertIngredient(Ingredient ingredient)
         {
             await _database.InsertAsync(ingredient);
+        }
+
+        public async Task UpdateIngredient(Ingredient ingredient)
+        {
+            await _database.UpdateAsync(ingredient);
         }
 
         #endregion

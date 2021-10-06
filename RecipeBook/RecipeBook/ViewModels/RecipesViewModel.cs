@@ -23,9 +23,9 @@ namespace RecipeBook.ViewModels
             OpenRecipeCommand = new Command<Recipe>(OpenRecipeAction);
             EditRecipeCommand = new Command<Recipe>(EditRecipeAction);
             AddRecipeCommand = new Command(AddRecipeAction);
+            MessagingCenter.Subscribe<AddEditRecipeViewModel>(this, "RefreshRecipes", (LoadAgain) => { LoadRecipes(); });
 
             SearchResult = string.Empty;
-            MessagingCenter.Subscribe<AddEditRecipeViewModel>(this, "LoadRecipes", (LoadAgain) => { LoadRecipes(); });
         }
 
         public ICommand RefreshCommand { get; set; }
@@ -67,14 +67,6 @@ namespace RecipeBook.ViewModels
             {
                 IsRefreshing = true;
                 Recipes = new ObservableCollection<Recipe>(await App.Database.GetRecipes(SearchResult.ToLower()));
-
-                Recipes.Add(new Recipe
-                {
-                    Name = "Test1",
-                    CreatedOn = DateTime.Now,
-                    RecipeId = 100,
-                    TimeOfMakingTheRecipe = new TimeSpan(0, 50, 0)
-                }); ;
                 IsRefreshing = false;
             }
             catch(Exception ex)
@@ -154,7 +146,6 @@ namespace RecipeBook.ViewModels
                     return;
 
                 await Navigation.PushAsync(new AddEditRecipePage(clickedRecipe));
-                LoadRecipes();
             }
             catch (Exception ex)
             {

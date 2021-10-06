@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace RecipeBook.Models
@@ -41,7 +42,7 @@ namespace RecipeBook.Models
             get => _TimeOfMakingTheRecipeInput;
             set
             {
-                _TimeOfMakingTheRecipeInput = value; OnPropertyChanged("TimeOfMakingTheRecipeInput");
+                _TimeOfMakingTheRecipeInput = value; OnPropertyChanged("TimeOfMakingTheRecipeInput"); OnPropertyChanged("FormattedTimeOfMakingTheRecipe");
                 ValidateTimeOfMakingTheRecipeInput();
             }
         }
@@ -164,13 +165,17 @@ namespace RecipeBook.Models
 
         public async void DeleteIngredient(Ingredient ingredient)
         {
-            await App.Database.DeleteIngredient(ingredient);
+            if(RecipeId > 0)
+                await App.Database.DeleteIngredient(ingredient);
+
             Ingredients.Remove(ingredient);
         }
 
         public async void DeleteMakingStep(MakingStep makingStep)
         {
-            await App.Database.DeleteMakingStep(makingStep);
+            if(RecipeId > 0)
+                await App.Database.DeleteMakingStep(makingStep);
+
             MakingSteps.Remove(makingStep);
         }
         
@@ -194,6 +199,22 @@ namespace RecipeBook.Models
             }
 
             MakingSteps.Add(makingStep);
+        }
+
+        public async void UpdateMakingStep(MakingStep makingStep)
+        {
+            if (RecipeId <= 0)
+                return;
+
+            await App.Database.UpdateMakingStep(makingStep);
+        }
+
+        public async void UpdateIngredient(Ingredient ingredient)
+        {
+            if (RecipeId <= 0)
+                return;
+
+            await App.Database.UpdateIngredient(ingredient);
         }
 
         public bool ValidateRecipe()
@@ -253,12 +274,28 @@ namespace RecipeBook.Models
 
         public async void UpdateRecipe()
         {
-            await App.Database.UpdateRecipe(this);
+            await App.Database.UpdateRecipe(this);    
         }
 
-        public void AddNewRecipe()
+        public async Task<bool> AddNewRecipe()
         {
+            await App.Database.InsertRecipe(this);
 
+            int newRecipeId = App.Database.GetLastRecipeId();
+
+            foreach (MakingStep makingStep in MakingSteps)
+            {
+                makingStep.RecipeId = newRecipeId;
+                await App.Database.InsertMakingStep(makingStep);
+            }
+
+            foreach (Ingredient ingredient in Ingredients)
+            {
+                ingredient.RecipeId = newRecipeId;
+                await App.Database.InsertIngredient(ingredient);
+            }
+
+            return true;
         }
     }
 }

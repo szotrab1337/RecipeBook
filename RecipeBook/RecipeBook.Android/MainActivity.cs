@@ -1,13 +1,15 @@
-﻿using System;
+﻿using Acr.UserDialogs;
 using Android.App;
 using Android.Content.PM;
-using Android.Runtime;
 using Android.OS;
-using Acr.UserDialogs;
+using Android.Runtime;
+using Android.Views;
+using RecipeBook.CustomRenders;
+using System.Linq;
 
 namespace RecipeBook.Droid
 {
-    [Activity(Label = "RecipeBook", Icon = "@mipmap/icon", Theme = "@style/MainTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize )]
+    [Activity(Label = "RecipeBook", Icon = "@mipmap/icon", Theme = "@style/MainTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)

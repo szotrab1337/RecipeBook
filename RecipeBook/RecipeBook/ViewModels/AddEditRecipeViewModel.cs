@@ -27,6 +27,7 @@ namespace RecipeBook.ViewModels
             ManageIngredientCommand = new Command<Ingredient>(ManageIngredientAction);
             ManagePictureCommand = new Command(ManagePictureAction);
             SaveCommand = new Command(SaveAction);
+            ConfirmLeaveCommand = new Command(ConfirmLeaveAction);
 
             if (recipe is null)
             {
@@ -49,6 +50,7 @@ namespace RecipeBook.ViewModels
         public ICommand ManageIngredientCommand { get; set; }
         public ICommand ManagePictureCommand { get; set; }
         public ICommand SaveCommand { get; set; }
+        public ICommand ConfirmLeaveCommand { get; set; }
 
         public Recipe Recipe
         {
@@ -63,6 +65,8 @@ namespace RecipeBook.ViewModels
 
             if (makingStep is null)
                 return;
+
+            makingStep.Number = Recipe.MakingSteps.Count + 1;
 
             Recipe.AddMakingStep(makingStep);
         }
@@ -86,21 +90,22 @@ namespace RecipeBook.ViewModels
                 if (makingStep is null)
                     return;
 
-                bool result = await UserDialogs.Instance.ConfirmAsync(new ConfirmConfig
+                List<string> choices = new List<string>
                 {
-                    Message = $"Czy na pewno chcesz usunąć krok \"{makingStep.Name}\"?",
-                    OkText = "Tak",
-                    CancelText = "Anuluj",
-                    Title = "Potwierdzenie",
-                    AndroidStyleId = 2131689474
-                });
+                    "Edytuj",
+                    "Usuń"
+                };
 
-                if (!result)
+                string result = await UserDialogs.Instance.ActionSheetAsync("Wybierz...", string.Empty, "Anuluj", CancellationToken.None, choices.ToArray());
+
+                if (result.Equals("Anuluj") || string.IsNullOrWhiteSpace(result))
                     return;
 
-                makingStep.Number = Recipe.MakingSteps.Count + 1;
+                if (result.Equals("Edytuj"))
+                    EditMakingStep(makingStep);
 
-                Recipe.DeleteMakingStep(makingStep);
+                if (result.Equals("Usuń"))
+                    RemoveMakingStep(makingStep);
             }
             catch (Exception ex)
             {
@@ -161,6 +166,30 @@ namespace RecipeBook.ViewModels
                 UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
             }
         }
+        
+        private async void RemoveMakingStep(MakingStep makingStep)
+        {
+            try
+            {
+                bool result = await UserDialogs.Instance.ConfirmAsync(new ConfirmConfig
+                {
+                    Message = $"Czy na pewno chcesz usunąć krok \"{makingStep.Name}\"?",
+                    OkText = "Tak",
+                    CancelText = "Anuluj",
+                    Title = "Potwierdzenie",
+                    AndroidStyleId = 2131689474
+                });
+
+                if (!result)
+                    return;
+
+                Recipe.DeleteMakingStep(makingStep);
+            }
+            catch (Exception ex)
+            {
+                UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
+            }
+        }
 
         private async void EditIngredient(Ingredient ingredient)
         {
@@ -168,8 +197,27 @@ namespace RecipeBook.ViewModels
             {
                 ingredient = await Navigation.ShowPopupAsync(new AddEditIngredientPopup(ingredient));
 
-                Ingredient ingredient1 = Recipe.Ingredients.FirstOrDefault(x => x.IngredientId == ingredient.IngredientId);
-                ingredient1 = ingredient;
+                Ingredient newIngredient = Recipe.Ingredients.FirstOrDefault(x => x.IngredientId == ingredient.IngredientId);
+                newIngredient = ingredient;
+
+                Recipe.UpdateIngredient(newIngredient);
+            }
+            catch (Exception ex)
+            {
+                UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
+            }
+        }
+        
+        private async void EditMakingStep(MakingStep makingStep)
+        {
+            try
+            {
+                makingStep = await Navigation.ShowPopupAsync(new AddEditMakingStepPopup(makingStep));
+
+                MakingStep newMakingStep = Recipe.MakingSteps.FirstOrDefault(x => x.MakingStepId == makingStep.MakingStepId);
+                newMakingStep = makingStep;
+
+                Recipe.UpdateMakingStep(makingStep);
             }
             catch (Exception ex)
             {
@@ -260,9 +308,35 @@ namespace RecipeBook.ViewModels
                 if (Recipe.RecipeId > 0)
                     Recipe.UpdateRecipe();
                 else
-                    Recipe.AddNewRecipe();
+                {
+                    await Recipe.AddNewRecipe();
+                    MessagingCenter.Send(this, "RefreshRecipes");
+                }
 
-                MessagingCenter.Send(this, "LoadRecipes");
+                await Navigation.PopAsync();
+            }
+            catch (Exception ex)
+            {
+                UserDialogs.Instance.Alert("Błąd!\r\n\r\n" + ex.ToString(), "Błąd", "OK");
+            }
+        }
+        
+        private async void ConfirmLeaveAction()
+        {
+            try
+            {
+                bool result = await UserDialogs.Instance.ConfirmAsync(new ConfirmConfig
+                {
+                    Message = "Czy na pewno chcesz opuścić stronę? Wprowadzone zmiany nie zostaną zapisane.",
+                    OkText = "Tak",
+                    CancelText = "Anuluj",
+                    Title = "Potwierdzenie",
+                    AndroidStyleId = 2131689474
+                });
+
+                if (!result)
+                    return;
+
                 await Navigation.PopAsync();
             }
             catch (Exception ex)
