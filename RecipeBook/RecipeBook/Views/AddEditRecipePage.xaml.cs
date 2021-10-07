@@ -40,6 +40,7 @@ namespace RecipeBook.Views
                 if(result)
                 {
                     base.OnBackButtonPressed();
+                    MessagingCenter.Send(this, "RefreshAllRecipes");
                     await Navigation.PopAsync();
                 }
             });

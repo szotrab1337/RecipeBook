@@ -13,7 +13,8 @@ namespace RecipeBook.Models
             new Unit(){ UnitId = 2, Name = "litry", ShortName = "l" },
             new Unit(){ UnitId = 3, Name = "opakowania", ShortName = "op" },
             new Unit(){ UnitId = 4, Name = "kilogramy", ShortName = "kg" },
-            new Unit(){ UnitId = 5, Name = "gramy", ShortName = "g" }
+            new Unit(){ UnitId = 5, Name = "gramy", ShortName = "g" },
+            new Unit(){ UnitId = 6, Name = "mililitry", ShortName = "ml" }
         };
 
         public static List<Unit> GetUnits()

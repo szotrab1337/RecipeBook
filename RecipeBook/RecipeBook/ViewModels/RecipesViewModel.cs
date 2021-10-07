@@ -23,7 +23,8 @@ namespace RecipeBook.ViewModels
             OpenRecipeCommand = new Command<Recipe>(OpenRecipeAction);
             EditRecipeCommand = new Command<Recipe>(EditRecipeAction);
             AddRecipeCommand = new Command(AddRecipeAction);
-            MessagingCenter.Subscribe<AddEditRecipeViewModel>(this, "RefreshRecipes", (LoadAgain) => { LoadRecipes(); });
+            MessagingCenter.Subscribe<AddEditRecipeViewModel>(this, "RefreshAllRecipes", (LoadAgain) => { LoadRecipes(); });
+            MessagingCenter.Subscribe<FavouriteRecipesViewModel>(this, "RefreshRecipes", (LoadAgain) => { LoadRecipes(); });
 
             SearchResult = string.Empty;
         }
@@ -86,6 +87,7 @@ namespace RecipeBook.ViewModels
                 recipe.IsFavourite = !recipe.IsFavourite;
 
                 await App.Database.UpdateRecipe(recipe);
+                MessagingCenter.Send(this, "RefreshFavouriteRecipes");
             }
             catch (Exception ex)
             {
@@ -116,6 +118,7 @@ namespace RecipeBook.ViewModels
 
                 Recipes.Remove(clickedRecipe);
                 await App.Database.DeleteRecipe(clickedRecipe);
+                MessagingCenter.Send(this, "RefreshFavouriteRecipes");
             }
             catch (Exception ex)
             {

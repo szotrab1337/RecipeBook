@@ -2,7 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RecipeBook.Views.FavouriteRecipesPage"
-             Background="#121212">
+             Background="#121212"
+             xmlns:customrenders="clr-namespace:RecipeBook.CustomRenders"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Name="FavouriteRecipes">
     
     <Shell.TitleView>
         <Grid VerticalOptions="Center">
@@ -24,17 +27,201 @@
     </Shell.TitleView>
 
     <AbsoluteLayout>
-        <Grid Margin="5,10,5,10"
-                     AbsoluteLayout.LayoutFlags="All"
-                     AbsoluteLayout.LayoutBounds="0,0,1,1">
+        <Grid Margin="10"
+              AbsoluteLayout.LayoutFlags="All"
+              AbsoluteLayout.LayoutBounds="0,0,1,1"
+              RowDefinitions="Auto,*">
 
+            <Label Text="Nie masz żadnego ulubionego przepisu!"
+                   FontSize="20"
+                   TextColor="{StaticResource TextDisabled}"
+                   HorizontalOptions="CenterAndExpand"
+                   VerticalOptions="CenterAndExpand"
+                   HorizontalTextAlignment="Center" Grid.RowSpan="2">
+                <Label.Style>
+                    <Style TargetType="Label">
+                        <Setter Property="IsVisible"
+                                Value="False"/>
+                        <Style.Triggers>
+                            <DataTrigger TargetType="Label"
+                                         Binding="{Binding Recipes.Count}"
+                                         Value="0">
+                                <Setter Property="IsVisible"
+                                        Value="True"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+
+            <customrenders:SearchBarCustom Grid.Row="0"
+                                           TextColor="{StaticResource TextPrimary}"
+                                           PlaceholderColor="{StaticResource TextDisabled}"
+                                           Placeholder="Wyszukaj..."
+                                           CancelButtonColor="{StaticResource TextPrimary}"
+                                           BackgroundColor="{StaticResource BackgroundSecondary}"
+                                           Margin="2,0,2,0"
+                                           Text="{Binding SearchResult}"/>
+
+            <RefreshView Grid.Row="1"
+                         IsRefreshing="{Binding IsRefreshing}"
+                         Command="{Binding Path=BindingContext.RefreshCommand, Source={x:Reference FavouriteRecipes}}">
+                <CollectionView ItemsSource="{Binding Recipes}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <SwipeView>
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+
+                                        <SwipeItemView Command="{Binding Path=BindingContext.DeleteRecipeCommand, Source={x:Reference FavouriteRecipes}}"
+                                                       CommandParameter="{Binding .}"
+                                                       BackgroundColor="{StaticResource BackgroundPrimary}">
+                                            <Frame Padding="0"
+                                                   Background="Red"
+                                                   Opacity="0.9"
+                                                   CornerRadius="10"
+                                                   HasShadow="False"
+                                                   Margin="2.5,5,2.5,5"
+                                                   HorizontalOptions="CenterAndExpand">
+                                                <Frame  BackgroundColor="{StaticResource BackgroundPrimary}"
+                                                        Margin="2"
+                                                        CornerRadius="8"
+                                                        BorderColor="Red"
+                                                        HorizontalOptions="CenterAndExpand">
+                                                    <StackLayout Orientation="Horizontal"
+                                                                 HorizontalOptions="CenterAndExpand">
+                                                        <Image Source="delete.png"                                                             
+                                                               HeightRequest="20"
+                                                               WidthRequest="20"/>
+                                                        <Label Text="Usuń"
+                                                               FontSize="15"
+                                                               TextColor="{StaticResource TextPrimary}"
+                                                               VerticalTextAlignment="Center"
+                                                               HorizontalTextAlignment="Center"
+                                                               Margin="0,10,0,10"/>
+                                                    </StackLayout>
+                                                </Frame>
+                                            </Frame>
+                                        </SwipeItemView>
+
+                                        <SwipeItemView Command="{Binding Path=BindingContext.EditRecipeCommand, Source={x:Reference FavouriteRecipes}}"
+                                                       CommandParameter="{Binding .}"
+                                                       BackgroundColor="{StaticResource BackgroundPrimary}"
+                                                       Margin="0,0,5,0">
+                                            <Frame Padding="0"
+                                                   Background="#007BFF"
+                                                   Opacity="0.9"
+                                                   CornerRadius="10"
+                                                   HasShadow="False"
+                                                   Margin="2.5,5,2.5,5"
+                                                   HorizontalOptions="CenterAndExpand">
+                                                <Frame Margin="2" 
+                                                       BackgroundColor="{StaticResource BackgroundPrimary}"
+                                                       CornerRadius="8"
+                                                       BorderColor="#007BFF"
+                                                       HorizontalOptions="CenterAndExpand">
+                                                    <StackLayout Orientation="Horizontal"
+                                                                 HorizontalOptions="CenterAndExpand">
+                                                        <Image Source="edit.png"
+                                                               HeightRequest="20"
+                                                               WidthRequest="20"/>
+                                                        <Label FontSize="15"
+                                                               VerticalTextAlignment="Center"
+                                                               VerticalOptions="CenterAndExpand"
+                                                               HorizontalTextAlignment="Start"
+                                                               TextColor="{StaticResource TextPrimary}"
+                                                               Margin="0,10,5,10"
+                                                               Text="Edytuj">
+                                                        </Label>
+                                                    </StackLayout>
+                                                </Frame>
+                                            </Frame>
+                                        </SwipeItemView>
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                <ContentView Padding="2,5,2,5"
+                                             Background="#121212">
+                                    <Frame Padding="7"
+                                           CornerRadius="15"
+                                           HasShadow="True"
+                                           BackgroundColor="{StaticResource BackgroundSecondary}">
+                                        <Frame.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.OpenRecipeCommand, Source={x:Reference FavouriteRecipes}}"
+                                                                  CommandParameter="{Binding .}"
+                                                                  NumberOfTapsRequired="1"/>
+                                        </Frame.GestureRecognizers>
+                                        <Grid ColumnDefinitions="Auto, 0, *">
+                                            <Frame Padding="0"
+                                                   CornerRadius="10" Grid.Column="0">
+                                                <Image Source="{Binding Picture}"
+                                                       WidthRequest="140"
+                                                       HeightRequest="100"
+                                                       Aspect="AspectFill"/>
+                                            </Frame>
+                                            <StackLayout Orientation="Vertical" Grid.Column="2">
+                                                <StackLayout Orientation="Horizontal">
+                                                    <Label Text="{Binding Name}"
+                                                           FontSize="20"/>
+                                                    <Image HorizontalOptions="EndAndExpand"
+                                                           HeightRequest="20"
+                                                           VerticalOptions="Start">
+                                                        <Image.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.ChangeFavouriteStateCommand, Source={x:Reference FavouriteRecipes}}"
+                                                                                  CommandParameter="{Binding .}"/>
+                                                        </Image.GestureRecognizers>
+                                                        <Image.Style>
+                                                            <Style TargetType="Image">
+                                                                <Setter Property="Source" Value="star.png"/>
+                                                                <Style.Triggers>
+                                                                    <DataTrigger TargetType="Image" Binding="{Binding IsFavourite}" Value="True">
+                                                                        <Setter Property="Source" Value="star_gold.png"/>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Image.Style>
+                                                    </Image>
+                                                </StackLayout>
+                                                <StackLayout Orientation="Vertical" VerticalOptions="EndAndExpand" Spacing="0">
+                                                    <StackLayout Orientation="Horizontal">
+                                                        <Label Text="Czas wykonania: "
+                                                               TextColor="{StaticResource TextSecondary}"
+                                                               FontSize="13"/>
+                                                        <Label Text="{Binding FormattedTimeOfMakingTheRecipe}"
+                                                               TextColor="{StaticResource TextSecondary}"
+                                                               FontSize="13"
+                                                               FontAttributes="Italic, Bold"/>
+                                                    </StackLayout>
+                                                    <StackLayout Orientation="Horizontal" >
+                                                        <Label Text="Ilość porcji: "
+                                                               TextColor="{StaticResource TextSecondary}"
+                                                               FontSize="13"/>
+                                                        <Label Text="{Binding NumberOfServings}"
+                                                               TextColor="{StaticResource TextSecondary}"
+                                                               FontSize="13"
+                                                               FontAttributes="Italic, Bold"/>
+                                                        <Label Text="{Binding FormattedCreatedOn}"
+                                                               TextColor="{StaticResource TextDisabled}"
+                                                               FontSize="10"
+                                                               HorizontalOptions="EndAndExpand"
+                                                               VerticalOptions="EndAndExpand"/>
+                                                    </StackLayout>
+                                                </StackLayout>
+                                            </StackLayout>
+                                        </Grid>
+                                    </Frame>
+                                </ContentView>
+                            </SwipeView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
         </Grid>
-        <ImageButton Source="plus_80.png"
+
+        <ImageButton Source="plus.png"
                      BackgroundColor="Transparent"
                      AbsoluteLayout.LayoutFlags="PositionProportional"
-                     AbsoluteLayout.LayoutBounds=".95,.95,50,50"
-                     HeightRequest="40"
-                     Command="{Binding AddShopCommand}"/>
+                     AbsoluteLayout.LayoutBounds=".96,.96,55,55"
+                     Command="{Binding AddRecipeCommand}"/>
     </AbsoluteLayout>
-    
+
 </ContentPage>

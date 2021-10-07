@@ -81,7 +81,7 @@ namespace RecipeBook.Models
         private string _PictureRaw;
 
         [Ignore]
-        private string ValidateMessage { get; set; }
+        public string ValidateMessage { get; set; }
 
         [Ignore]
         public ImageSource Picture => string.IsNullOrEmpty(PictureRaw) ? ImageSource.FromResource("RecipeBook.Images.placeholder.png") :
@@ -227,13 +227,13 @@ namespace RecipeBook.Models
 
             if (NumberOfServings <= 0)
             {
-                ValidateMessage = "Wprowadź ilość porcji!";
+                ValidateMessage = "Wprowadź ilość porcji! To pole nie może być puste.";
                 return false;
             }
 
             if(TimeOfMakingTheRecipe.TotalMinutes <= 0)
             {
-                ValidateMessage = "Wprowadź czas wykonania!";
+                ValidateMessage = "Wprowadź czas wykonania! To pole nie może być puste.";
                 return false;
             }
 
@@ -272,9 +272,10 @@ namespace RecipeBook.Models
                 TimeOfMakingTheRecipe = new TimeSpan(0, Convert.ToInt32(TimeOfMakingTheRecipeInput), 0);
         }
 
-        public async void UpdateRecipe()
+        public async Task<bool> UpdateRecipe()
         {
-            await App.Database.UpdateRecipe(this);    
+            await App.Database.UpdateRecipe(this);
+            return true;
         }
 
         public async Task<bool> AddNewRecipe()

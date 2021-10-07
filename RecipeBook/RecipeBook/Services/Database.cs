@@ -27,12 +27,12 @@ namespace RecipeBook.Services
             return _database.InsertAsync(recipe);
         }
 
-        public Task<List<Recipe>> GetRecipes(string filter)
+        public Task<List<Recipe>> GetRecipes(string filter, bool onlyFavourites = false)
         {
             bool dontUserFilter = string.IsNullOrWhiteSpace(filter);
 
-            return _database.Table<Recipe>().Where(x => dontUserFilter
-                        || x.Name.ToLower().Contains(filter)).OrderBy(x => x.Name).ToListAsync();
+            return _database.Table<Recipe>().Where(x => (dontUserFilter || x.Name.ToLower().Contains(filter))
+                        && (!onlyFavourites || x.IsFavourite)).OrderBy(x => x.Name).ToListAsync();
         }
 
         public int GetLastRecipeId()

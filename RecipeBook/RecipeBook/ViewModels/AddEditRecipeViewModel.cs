@@ -305,12 +305,21 @@ namespace RecipeBook.ViewModels
         {
             try
             {
+                if(!Recipe.ValidateRecipe())
+                {
+                    UserDialogs.Instance.Alert(Recipe.ValidateMessage, "Błąd", "OK");
+                    return;
+                }
+
                 if (Recipe.RecipeId > 0)
-                    Recipe.UpdateRecipe();
+                {
+                    await Recipe.UpdateRecipe();
+                    MessagingCenter.Send(this, "RefreshAllRecipes");
+                }
                 else
                 {
                     await Recipe.AddNewRecipe();
-                    MessagingCenter.Send(this, "RefreshRecipes");
+                    MessagingCenter.Send(this, "RefreshAllRecipes");
                 }
 
                 await Navigation.PopAsync();
@@ -337,6 +346,7 @@ namespace RecipeBook.ViewModels
                 if (!result)
                     return;
 
+                MessagingCenter.Send(this, "RefreshAllRecipes");
                 await Navigation.PopAsync();
             }
             catch (Exception ex)
