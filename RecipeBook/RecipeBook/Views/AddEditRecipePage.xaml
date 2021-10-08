@@ -192,6 +192,13 @@
                                 </BindableLayout.ItemTemplate>
                             </StackLayout>
                         </StackLayout>
+
+                        <StackLayout Orientation="Vertical">
+                            <Label Text="Źródło"/>
+                            <Entry Placeholder="źródło"
+                                   Keyboard="Url"
+                                   Text="{Binding Recipe.Source}"/>
+                        </StackLayout>
                     </StackLayout>
                 </Frame>
             </StackLayout>

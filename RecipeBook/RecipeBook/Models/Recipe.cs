@@ -79,9 +79,19 @@ namespace RecipeBook.Models
             set { _PictureRaw = value; OnPropertyChanged("PictureRaw"); OnPropertyChanged("Picture"); OnPropertyChanged("IsDefaultPicture"); }
         }
         private string _PictureRaw;
+        
+        public string Source
+        {
+            get => _Source;
+            set { _Source = value; OnPropertyChanged("Source"); }
+        }
+        private string _Source;
 
         [Ignore]
         public bool HintsAvailable => string.IsNullOrWhiteSpace(Hints) ? false : true;
+
+        [Ignore]
+        public bool SourceAvailable => string.IsNullOrWhiteSpace(Source) ? false : true;
 
         [Ignore]
         public string ValidateMessage { get; set; }

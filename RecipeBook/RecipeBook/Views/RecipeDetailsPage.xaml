@@ -4,7 +4,8 @@
              x:Class="RecipeBook.Views.RecipeDetailsPage"
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              Background="#121212"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             x:Name="RecipeDetails">
 
     <Grid>
         <ScrollView>
@@ -152,6 +153,28 @@
                             </StackLayout>
                         </StackLayout>
 
+                        <StackLayout Orientation="Vertical"
+                                     Spacing="2">
+                            <Label Text="Źródło"
+                                   TextColor="{StaticResource TextSecondary}"/>
+                            <Label Text="{Binding Recipe.Source}"
+                                   FontSize="16"
+                                   TextDecorations="Underline">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.SourceTapCommand, Source={x:Reference RecipeDetails}}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <StackLayout.Style>
+                                <Style TargetType="StackLayout">
+                                    <Style.Triggers>
+                                        <DataTrigger TargetType="StackLayout" Binding="{Binding Recipe.SourceAvailable}" Value="False">
+                                            <Setter Property="IsVisible" Value="False"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackLayout.Style>
+                        </StackLayout>
+                        
                     </StackLayout>
                 </Frame>
 
