@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RecipeBook.Views.RecipeDetailsPage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             Background="#121212"
+             Title="{Binding Title}">
+
+    <Grid>
+        <ScrollView>
+            <StackLayout Orientation="Vertical">
+                <Image Source="{Binding Recipe.Picture}"
+                           Grid.Row="0"
+                           HeightRequest="300"
+                           Aspect="AspectFill"/>
+
+                <Frame CornerRadius="5"
+                       BackgroundColor="{StaticResource BackgroundSecondary}"
+                       Margin="10">
+                    <StackLayout Orientation="Vertical"
+                                 Spacing="10">
+                        <Label Text="{Binding Recipe.Name}"
+                               FontSize="22"
+                               FontAttributes="Italic"/>
+                        <StackLayout Orientation="Horizontal">
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Ilość porcji: "
+                                       TextColor="{StaticResource TextSecondary}"
+                                       VerticalOptions="EndAndExpand"/>
+                                <Label Text="{Binding Recipe.NumberOfServings}"
+                                       FontAttributes="Italic, Bold"
+                                       FontSize="16"/>
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal"
+                                         HorizontalOptions="EndAndExpand">
+                                <Label Text="Czas wykonania: "
+                                       TextColor="{StaticResource TextSecondary}"
+                                       VerticalOptions="EndAndExpand"/>
+                                <Label Text="{Binding Recipe.FormattedTimeOfMakingTheRecipe}"
+                                       FontAttributes="Italic, Bold"
+                                       FontSize="16"/>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Vertical"
+                                     Spacing="2">
+                            <Label Text="Wskazówki"
+                                   TextColor="{StaticResource TextSecondary}"/>
+                            <Label Text="{Binding Recipe.Hints}"
+                                   FontSize="16"/>
+                            <StackLayout.Style>
+                                <Style TargetType="StackLayout">
+                                    <Style.Triggers>
+                                        <DataTrigger TargetType="StackLayout" Binding="{Binding Recipe.HintsAvailable}" Value="False">
+                                            <Setter Property="IsVisible" Value="False"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </StackLayout.Style>
+                        </StackLayout>
+
+                        <StackLayout Orientation="Vertical"
+                                     Margin="0,5,0,0"
+                                     Spacing="2">
+                            <Label Text="Składniki"
+                                   TextColor="{StaticResource TextSecondary}"/>
+                            <Label Text="Brak składników!"
+                                   HorizontalOptions="CenterAndExpand"
+                                   TextColor="{StaticResource TextSecondary}"
+                                   FontSize="18"
+                                   Margin="0,5,0,0">
+                                <Label.Style>
+                                    <Style TargetType="Label">
+                                        <Setter Property="IsVisible"
+                                                Value="False"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Recipe.Ingredients.Count}"
+                                                         Value="0"
+                                                         TargetType="Label">
+                                                <Setter Property="IsVisible"
+                                                        Value="True"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
+                            <StackLayout BindableLayout.ItemsSource="{Binding Recipe.Ingredients}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="Auto,*,Auto"
+                                              HorizontalOptions="FillAndExpand"
+                                              VerticalOptions="Start">
+                                            <Label Text="{Binding NumberFormatted}"
+                                                   TextColor="{StaticResource TextSecondary}"
+                                                   Margin="0,0,10,0"
+                                                   FontSize="17"
+                                                   Grid.Column="0"/>
+                                            <Label Text="{Binding Name}"
+                                                   FontSize="17"
+                                                   Opacity="0.9"
+                                                   Grid.Column="1"/>
+                                            <Label Text="{Binding QuantityFormatted}"
+                                                   HorizontalOptions="EndAndExpand"
+                                                   TextColor="{StaticResource TextDisabled}"
+                                                   Grid.Column="2"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Vertical"
+                                     Margin="0,10,0,0"
+                                     Spacing="2">
+                            <Label Text="Instrukcja wykonania"
+                                   TextColor="{StaticResource TextSecondary}"/>
+                            <Label Text="Brak kroków w instrukcji wykonania!"
+                                   HorizontalOptions="CenterAndExpand"
+                                   TextColor="{StaticResource TextSecondary}"
+                                   FontSize="18"
+                                   Margin="0,5,0,0">
+                                <Label.Style>
+                                    <Style TargetType="Label">
+                                        <Setter Property="IsVisible"
+                                                Value="False"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Recipe.MakingSteps.Count}"
+                                                         Value="0"
+                                                         TargetType="Label">
+                                                <Setter Property="IsVisible"
+                                                        Value="True"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Style>
+                            </Label>
+                            <StackLayout BindableLayout.ItemsSource="{Binding Recipe.MakingSteps}">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="Auto,*"
+                                              VerticalOptions="Start">
+                                            <Label Text="{Binding NumberFormatted}"
+                                                   TextColor="{StaticResource TextSecondary}"
+                                                   FontSize="17"
+                                                   Margin="0,0,10,0"
+                                                   Grid.Column="0"/>
+                                            <Label Text="{Binding Name}"
+                                                   FontSize="17"
+                                                   Opacity="0.9"
+                                                   Grid.Column="1"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </StackLayout>
+                        </StackLayout>
+
+                    </StackLayout>
+                </Frame>
+
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

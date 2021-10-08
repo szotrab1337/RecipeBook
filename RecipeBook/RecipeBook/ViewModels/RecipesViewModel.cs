@@ -126,14 +126,14 @@ namespace RecipeBook.ViewModels
             }
         }
 
-        private void OpenRecipeAction(Recipe clickedRecipe)
+        private async void OpenRecipeAction(Recipe clickedRecipe)
         {
             try
             {
                 if (clickedRecipe is null)
                     return;
 
-                
+                await Navigation.PushAsync(new RecipeDetailsPage(clickedRecipe));
             }
             catch (Exception ex)
             {

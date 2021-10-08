@@ -197,6 +197,9 @@ namespace RecipeBook.ViewModels
             {
                 ingredient = await Navigation.ShowPopupAsync(new AddEditIngredientPopup(ingredient));
 
+                if (ingredient is null)
+                    return;
+
                 Ingredient newIngredient = Recipe.Ingredients.FirstOrDefault(x => x.IngredientId == ingredient.IngredientId);
                 newIngredient = ingredient;
 
@@ -213,6 +216,9 @@ namespace RecipeBook.ViewModels
             try
             {
                 makingStep = await Navigation.ShowPopupAsync(new AddEditMakingStepPopup(makingStep));
+
+                if (makingStep is null)
+                    return;
 
                 MakingStep newMakingStep = Recipe.MakingSteps.FirstOrDefault(x => x.MakingStepId == makingStep.MakingStepId);
                 newMakingStep = makingStep;

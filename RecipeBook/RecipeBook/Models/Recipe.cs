@@ -81,6 +81,9 @@ namespace RecipeBook.Models
         private string _PictureRaw;
 
         [Ignore]
+        public bool HintsAvailable => string.IsNullOrWhiteSpace(Hints) ? false : true;
+
+        [Ignore]
         public string ValidateMessage { get; set; }
 
         [Ignore]

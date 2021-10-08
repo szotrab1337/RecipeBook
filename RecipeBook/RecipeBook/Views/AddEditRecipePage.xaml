@@ -111,23 +111,26 @@
                                          Margin="0,5,0,0">
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate>
-                                        <StackLayout Orientation="Horizontal"
-                                                     HorizontalOptions="FillAndExpand"
-                                                     VerticalOptions="Start"
-                                                     xct:TouchEffect.LongPressCommand="{Binding Path=BindingContext.ManageIngredientCommand, Source={x:Reference AddEditRecipe}}"
-                                                     xct:TouchEffect.CommandParameter="{Binding .}"
-                                                     xct:TouchEffect.LongPressDuration="600">
+                                        <Grid ColumnDefinitions="Auto,*,Auto"
+                                              HorizontalOptions="FillAndExpand"
+                                              VerticalOptions="Start"
+                                              xct:TouchEffect.LongPressCommand="{Binding Path=BindingContext.ManageIngredientCommand, Source={x:Reference AddEditRecipe}}"
+                                              xct:TouchEffect.CommandParameter="{Binding .}"
+                                              xct:TouchEffect.LongPressDuration="600">
                                             <Label Text="{Binding NumberFormatted}"
                                                    TextColor="{StaticResource TextSecondary}"
                                                    Margin="0,0,10,0"
-                                                   FontSize="17"/>
+                                                   FontSize="17"
+                                                   Grid.Column="0"/>
                                             <Label Text="{Binding Name}"
                                                    FontSize="17"
-                                                   Opacity="0.9"/>
+                                                   Opacity="0.9"
+                                                   Grid.Column="1"/>
                                             <Label Text="{Binding QuantityFormatted}"
                                                    HorizontalOptions="EndAndExpand"
-                                                   TextColor="{StaticResource TextDisabled}"/>
-                                        </StackLayout>
+                                                   TextColor="{StaticResource TextDisabled}"
+                                                   Grid.Column="2"/>
+                                        </Grid>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
                             </StackLayout>
@@ -170,20 +173,21 @@
                                          Margin="0,5,0,0">
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate>
-                                        <StackLayout Orientation="Horizontal"
-                                                     HorizontalOptions="FillAndExpand"
-                                                     VerticalOptions="Start"
-                                                     xct:TouchEffect.LongPressCommand="{Binding Path=BindingContext.ManageMakingStepCommand, Source={x:Reference AddEditRecipe}}"
-                                                     xct:TouchEffect.CommandParameter="{Binding .}"
-                                                     xct:TouchEffect.LongPressDuration="600">
+                                        <Grid ColumnDefinitions="Auto,*"
+                                              VerticalOptions="Start"
+                                              xct:TouchEffect.LongPressCommand="{Binding Path=BindingContext.ManageMakingStepCommand, Source={x:Reference AddEditRecipe}}"
+                                              xct:TouchEffect.CommandParameter="{Binding .}"
+                                              xct:TouchEffect.LongPressDuration="600">
                                             <Label Text="{Binding NumberFormatted}"
                                                    TextColor="{StaticResource TextSecondary}"
+                                                   FontSize="17"
                                                    Margin="0,0,10,0"
-                                                   FontSize="17"/>
+                                                   Grid.Column="0"/>
                                             <Label Text="{Binding Name}"
                                                    FontSize="17"
-                                                   Opacity="0.9"/>
-                                        </StackLayout>
+                                                   Opacity="0.9"
+                                                   Grid.Column="1"/>
+                                        </Grid>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
                             </StackLayout>
