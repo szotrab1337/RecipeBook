@@ -72,6 +72,7 @@ namespace RecipeBook.ViewModels
                 UserDialogs.Instance.ShowLoading("Trwa importowanie...", MaskType.Black);
                 Recipes = new ObservableCollection<Recipe>(await App.Database.GetRecipes(SearchResult.ToLower(), true));
                 UserDialogs.Instance.HideLoading();
+                IsRefreshing = false;
             }
             catch (Exception ex)
             {

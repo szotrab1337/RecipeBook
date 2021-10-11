@@ -24,6 +24,7 @@ namespace RecipeBook.ViewModels
                 UserDialogs.Instance.ShowLoading("Trwa importowanie...", MaskType.Black);
                 LoadRecipes();
                 UserDialogs.Instance.HideLoading();
+                IsRefreshing = false;
             });
             DeleteRecipeCommand = new Command<ApiRecipe>(DeleteRecipeAction);
             ImportRecipeCommand = new Command<ApiRecipe>(ImportRecipeAction);
