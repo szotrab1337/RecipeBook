@@ -18,7 +18,7 @@
                 <Setter Property="Shell.ForegroundColor" Value="{StaticResource Primary}" />
                 <Setter Property="Shell.TitleColor" Value="{StaticResource Primary}" />
                 <Setter Property="Shell.DisabledColor" Value="{StaticResource TextDisabled}" />
-                <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF" />
+                <Setter Property="Shell.UnselectedColor" Value="{StaticResource BackgroundPrimary}" />
                 <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Primary}" />
                 <Setter Property="Shell.TabBarForegroundColor" Value="{StaticResource BackgroundPrimary}"/>
                 <Setter Property="Shell.TabBarUnselectedColor" Value="{StaticResource BackgroundPrimary}"/>
@@ -32,6 +32,7 @@
     <TabBar>
         <ShellContent Title="Wszystkie" Icon="list.png" ContentTemplate="{DataTemplate local:RecipesPage}" />
         <ShellContent Title="Ulubione" Icon="star.png" ContentTemplate="{DataTemplate local:FavouriteRecipesPage}" />
+        <ShellContent Title="Importuj" Icon="share.png" ContentTemplate="{DataTemplate local:ImportRecipePage}" />
     </TabBar>
 
 </Shell>

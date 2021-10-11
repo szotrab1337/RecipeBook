@@ -70,6 +70,42 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <SwipeView>
+
+                                <SwipeView.LeftItems>
+                                    <SwipeItems>
+                                        <SwipeItemView Command="{Binding Path=BindingContext.ShareRecipeCommand, Source={x:Reference Recipes}}"
+                                                       CommandParameter="{Binding .}"
+                                                       BackgroundColor="{StaticResource BackgroundPrimary}">
+                                            <Frame Padding="0"
+                                                   Background="#28A745"
+                                                   Opacity="0.9"
+                                                   CornerRadius="10"
+                                                   HasShadow="False"
+                                                   Margin="2.5,5,2.5,5"
+                                                   HorizontalOptions="CenterAndExpand">
+                                                <Frame  BackgroundColor="{StaticResource BackgroundPrimary}"
+                                                        Margin="2"
+                                                        CornerRadius="8"
+                                                        BorderColor="#28A745"
+                                                        HorizontalOptions="CenterAndExpand">
+                                                    <StackLayout Orientation="Horizontal"
+                                                                 HorizontalOptions="CenterAndExpand">
+                                                        <Image Source="share.png"                                                             
+                                                               HeightRequest="20"
+                                                               WidthRequest="20"/>
+                                                        <Label Text="Udostępnij"
+                                                               FontSize="15"
+                                                               TextColor="{StaticResource TextPrimary}"
+                                                               VerticalTextAlignment="Center"
+                                                               HorizontalTextAlignment="Center"
+                                                               Margin="0,10,0,10"/>
+                                                    </StackLayout>
+                                                </Frame>
+                                            </Frame>
+                                        </SwipeItemView>
+                                    </SwipeItems>
+                                </SwipeView.LeftItems>
+                                
                                 <SwipeView.RightItems>
                                     <SwipeItems>
 

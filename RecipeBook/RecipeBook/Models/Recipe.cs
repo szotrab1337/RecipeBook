@@ -1,12 +1,16 @@
-﻿using SQLite;
+﻿using Newtonsoft.Json;
+using RecipeBook.Models.Api;
+using SQLite;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 namespace RecipeBook.Models
 {
@@ -143,6 +147,14 @@ namespace RecipeBook.Models
             LoadMakingStepsList();
             LoadIngredientsList();
         }
+        
+        public async Task<bool> LoadAssociatedItemsAsync()
+        {
+            await LoadMakingStepsListAsync();
+            await LoadIngredientsListAsync();
+
+            return true;
+        }
 
         public async void LoadMakingStepsList()
         {
@@ -152,6 +164,18 @@ namespace RecipeBook.Models
         public async void LoadIngredientsList()
         {
             Ingredients = new ObservableCollection<Ingredient>(await App.Database.GetIngredients(RecipeId));
+        }
+        
+        public async Task<bool> LoadMakingStepsListAsync()
+        {
+            MakingSteps = new ObservableCollection<MakingStep>(await App.Database.GetMakingSteps(RecipeId));
+            return true;
+        }
+        
+        public async Task<bool> LoadIngredientsListAsync()
+        {
+            Ingredients = new ObservableCollection<Ingredient>(await App.Database.GetIngredients(RecipeId));
+            return true;
         }
         
         public async void DeleteMakingStepsList()
@@ -182,6 +206,12 @@ namespace RecipeBook.Models
                 await App.Database.DeleteIngredient(ingredient);
 
             Ingredients.Remove(ingredient);
+            RenumberIngredients();
+
+            foreach (Ingredient ingr in Ingredients)
+            {
+                UpdateIngredient(ingr);
+            }
         }
 
         public async void DeleteMakingStep(MakingStep makingStep)
@@ -190,6 +220,22 @@ namespace RecipeBook.Models
                 await App.Database.DeleteMakingStep(makingStep);
 
             MakingSteps.Remove(makingStep);
+            RenumberMakingSteps();
+
+            foreach (MakingStep step in MakingSteps)
+            {
+                UpdateMakingStep(step);
+            }
+        }
+
+        public void RenumberMakingSteps()
+        {
+            MakingSteps.ForEach(x => x.Number = MakingSteps.IndexOf(x) + 1);
+        }
+        
+        public void RenumberIngredients()
+        {
+            Ingredients.ForEach(x => x.Number = Ingredients.IndexOf(x) + 1);
         }
         
         public async void AddIngredient(Ingredient ingredient)
@@ -310,6 +356,92 @@ namespace RecipeBook.Models
             }
 
             return true;
+        }
+
+        public async void ExportToWebsite()
+        {
+            ApiRecipe apiRecipe = new ApiRecipe()
+            {
+                Name = Name,
+                CreatedOn = DateTime.Now,
+                Hints = Hints,
+                PictureRaw = PictureRaw,
+                Source = Source,
+                TimeOfMakingTheRecipe = TimeOfMakingTheRecipe.Ticks,
+                NumberOfServings = NumberOfServings,
+            };
+
+            await LoadAssociatedItemsAsync();
+
+            apiRecipe.Ingredients = new List<ApiIngredient>();
+
+            foreach (Ingredient ingredient in Ingredients)
+            {
+                apiRecipe.Ingredients.Add(new ApiIngredient
+                {
+                    Name = ingredient.Name,
+                    Quantity = ingredient.Quantity,
+                    UnitId = ingredient.UnitId,
+                    Number = ingredient.Number
+                });
+            }
+
+            apiRecipe.MakingSteps = new List<ApiMakingStep>();
+
+            foreach (MakingStep makingStep in MakingSteps)
+            {
+                apiRecipe.MakingSteps.Add(new ApiMakingStep
+                {
+                    Name = makingStep.Name,
+                    Number = makingStep.Number
+                });
+            }
+
+            StringContent message = new StringContent(JsonConvert.SerializeObject(apiRecipe, GenericJsonSerializerSettings.GetSettings()),
+                   Encoding.UTF8, "application/json");
+
+            ApiAdapter.PostRecipe(message.ReadAsStringAsync().Result);
+        }
+
+        public async Task<string> ShareRecipeAsText()
+        {
+            await LoadAssociatedItemsAsync();
+
+            StringBuilder builder = new StringBuilder();
+            builder.Append(Name);
+
+            builder.AppendLine();
+            builder.AppendLine();
+
+            builder.AppendLine($"Ilość porcji: {NumberOfServings}");
+            builder.AppendLine($"Czas przygotowania: {TimeOfMakingTheRecipe.TotalMinutes} min");
+
+            builder.AppendLine();
+
+            if (Ingredients.Count > 0)
+                builder.AppendLine("Lista składników:");
+
+            foreach (Ingredient ingredient in Ingredients)
+            {
+                builder.AppendLine($"{ingredient.NumberFormatted} {ingredient.Name} - {ingredient.QuantityFormatted}");
+            }
+
+            builder.AppendLine();
+
+            if (MakingSteps.Count > 0)
+                builder.AppendLine("Instrukcja wykonania:");
+
+            foreach (MakingStep makingStep in MakingSteps)
+            {
+                builder.AppendLine($"{makingStep.NumberFormatted} {makingStep.Name}");
+            }
+
+            builder.AppendLine();
+
+            if(!string.IsNullOrWhiteSpace(Source))
+                builder.AppendLine($"Źródło: {Source}");
+
+            return builder.ToString();
         }
     }
 }

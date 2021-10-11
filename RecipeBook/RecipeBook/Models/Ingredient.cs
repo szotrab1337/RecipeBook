@@ -21,7 +21,7 @@ namespace RecipeBook.Models
         public int Number
         {
             get => _Number;
-            set { _Number = value; OnPropertyChanged("Number"); }
+            set { _Number = value; OnPropertyChanged("Number"); OnPropertyChanged("NumberFormatted"); }
         }
         private int _Number;
         

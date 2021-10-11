@@ -33,6 +33,11 @@ namespace RecipeBook.Services
 
             return _database.Table<Recipe>().Where(x => (dontUserFilter || x.Name.ToLower().Contains(filter))
                         && (!onlyFavourites || x.IsFavourite)).OrderBy(x => x.Name).ToListAsync();
+        }     
+        
+        public Task<Recipe> GetRecipe(string recipeName)
+        {
+            return _database.Table<Recipe>().Where(x => x.Name == recipeName).FirstOrDefaultAsync();
         }
 
         public int GetLastRecipeId()

@@ -1,22 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="RecipeBook.Views.FavouriteRecipesPage"
+             x:Class="RecipeBook.Views.ImportRecipePage"
              Background="#121212"
-             xmlns:customrenders="clr-namespace:RecipeBook.CustomRenders"
-             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-             x:Name="FavouriteRecipes">
-    
+             x:Name="Import">
     <Shell.TitleView>
         <Grid VerticalOptions="Center">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Image Source="chef_36.png"
+            <Image Source="chef.png"
                    Grid.Column="0"
                    HeightRequest="30"/>
-            <Label Text="Ulubione"
+            <Label Text="Przepisy"
                    VerticalOptions="CenterAndExpand"
                    TextColor="{StaticResource Primary}"
                    Margin="5,0,0,0"
@@ -27,12 +24,12 @@
     </Shell.TitleView>
 
     <AbsoluteLayout>
-        <Grid Margin="10"
+        <Grid Margin="10,0,10,0"
               AbsoluteLayout.LayoutFlags="All"
               AbsoluteLayout.LayoutBounds="0,0,1,1"
               RowDefinitions="Auto,*">
 
-            <Label Text="Nie masz żadnego ulubionego przepisu!"
+            <Label Text="Nie masz żadnego przepisu!"
                    FontSize="20"
                    TextColor="{StaticResource TextDisabled}"
                    HorizontalOptions="CenterAndExpand"
@@ -53,63 +50,19 @@
                     </Style>
                 </Label.Style>
             </Label>
-
-            <customrenders:SearchBarCustom Grid.Row="0"
-                                           TextColor="{StaticResource TextPrimary}"
-                                           PlaceholderColor="{StaticResource TextDisabled}"
-                                           Placeholder="Wyszukaj..."
-                                           CancelButtonColor="{StaticResource TextPrimary}"
-                                           BackgroundColor="{StaticResource BackgroundSecondary}"
-                                           Margin="2,0,2,0"
-                                           Text="{Binding SearchResult}"/>
-
+        
             <RefreshView Grid.Row="1"
                          IsRefreshing="{Binding IsRefreshing}"
-                         Command="{Binding Path=BindingContext.RefreshCommand, Source={x:Reference FavouriteRecipes}}">
+                         Command="{Binding Path=BindingContext.RefreshCommand, Source={x:Reference Import}}">
                 <CollectionView ItemsSource="{Binding Recipes}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <SwipeView>
 
-                                <SwipeView.LeftItems>
-                                    <SwipeItems>
-                                        <SwipeItemView Command="{Binding Path=BindingContext.ShareRecipeCommand, Source={x:Reference FavouriteRecipes}}"
-                                                       CommandParameter="{Binding .}"
-                                                       BackgroundColor="{StaticResource BackgroundPrimary}">
-                                            <Frame Padding="0"
-                                                   Background="#28A745"
-                                                   Opacity="0.9"
-                                                   CornerRadius="10"
-                                                   HasShadow="False"
-                                                   Margin="2.5,5,2.5,5"
-                                                   HorizontalOptions="CenterAndExpand">
-                                                <Frame  BackgroundColor="{StaticResource BackgroundPrimary}"
-                                                        Margin="2"
-                                                        CornerRadius="8"
-                                                        BorderColor="#28A745"
-                                                        HorizontalOptions="CenterAndExpand">
-                                                    <StackLayout Orientation="Horizontal"
-                                                                 HorizontalOptions="CenterAndExpand">
-                                                        <Image Source="share.png"                                                             
-                                                               HeightRequest="20"
-                                                               WidthRequest="20"/>
-                                                        <Label Text="Udostępnij"
-                                                               FontSize="15"
-                                                               TextColor="{StaticResource TextPrimary}"
-                                                               VerticalTextAlignment="Center"
-                                                               HorizontalTextAlignment="Center"
-                                                               Margin="0,10,0,10"/>
-                                                    </StackLayout>
-                                                </Frame>
-                                            </Frame>
-                                        </SwipeItemView>
-                                    </SwipeItems>
-                                </SwipeView.LeftItems>
-
                                 <SwipeView.RightItems>
                                     <SwipeItems>
 
-                                        <SwipeItemView Command="{Binding Path=BindingContext.DeleteRecipeCommand, Source={x:Reference FavouriteRecipes}}"
+                                        <SwipeItemView Command="{Binding Path=BindingContext.DeleteRecipeCommand, Source={x:Reference Import}}"
                                                        CommandParameter="{Binding .}"
                                                        BackgroundColor="{StaticResource BackgroundPrimary}">
                                             <Frame Padding="0"
@@ -140,7 +93,7 @@
                                             </Frame>
                                         </SwipeItemView>
 
-                                        <SwipeItemView Command="{Binding Path=BindingContext.EditRecipeCommand, Source={x:Reference FavouriteRecipes}}"
+                                        <SwipeItemView Command="{Binding Path=BindingContext.ImportRecipeCommand, Source={x:Reference Import}}"
                                                        CommandParameter="{Binding .}"
                                                        BackgroundColor="{StaticResource BackgroundPrimary}"
                                                        Margin="0,0,5,0">
@@ -158,7 +111,7 @@
                                                        HorizontalOptions="CenterAndExpand">
                                                     <StackLayout Orientation="Horizontal"
                                                                  HorizontalOptions="CenterAndExpand">
-                                                        <Image Source="edit.png"
+                                                        <Image Source="share.png"
                                                                HeightRequest="20"
                                                                WidthRequest="20"/>
                                                         <Label FontSize="15"
@@ -167,7 +120,7 @@
                                                                HorizontalTextAlignment="Start"
                                                                TextColor="{StaticResource TextPrimary}"
                                                                Margin="0,10,5,10"
-                                                               Text="Edytuj">
+                                                               Text="Importuj">
                                                         </Label>
                                                     </StackLayout>
                                                 </Frame>
@@ -181,11 +134,6 @@
                                            CornerRadius="15"
                                            HasShadow="True"
                                            BackgroundColor="{StaticResource BackgroundSecondary}">
-                                        <Frame.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.OpenRecipeCommand, Source={x:Reference FavouriteRecipes}}"
-                                                                  CommandParameter="{Binding .}"
-                                                                  NumberOfTapsRequired="1"/>
-                                        </Frame.GestureRecognizers>
                                         <Grid ColumnDefinitions="Auto, 0, *">
                                             <Frame Padding="0"
                                                    CornerRadius="10" Grid.Column="0">
@@ -198,24 +146,6 @@
                                                 <StackLayout Orientation="Horizontal">
                                                     <Label Text="{Binding Name}"
                                                            FontSize="20"/>
-                                                    <Image HorizontalOptions="EndAndExpand"
-                                                           HeightRequest="20"
-                                                           VerticalOptions="Start">
-                                                        <Image.GestureRecognizers>
-                                                            <TapGestureRecognizer Command="{Binding Path=BindingContext.ChangeFavouriteStateCommand, Source={x:Reference FavouriteRecipes}}"
-                                                                                  CommandParameter="{Binding .}"/>
-                                                        </Image.GestureRecognizers>
-                                                        <Image.Style>
-                                                            <Style TargetType="Image">
-                                                                <Setter Property="Source" Value="star.png"/>
-                                                                <Style.Triggers>
-                                                                    <DataTrigger TargetType="Image" Binding="{Binding IsFavourite}" Value="True">
-                                                                        <Setter Property="Source" Value="star_gold.png"/>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Image.Style>
-                                                    </Image>
                                                 </StackLayout>
                                                 <StackLayout Orientation="Vertical" VerticalOptions="EndAndExpand" Spacing="0">
                                                     <StackLayout Orientation="Horizontal">
@@ -252,12 +182,5 @@
                 </CollectionView>
             </RefreshView>
         </Grid>
-
-        <ImageButton Source="plus.png"
-                     BackgroundColor="Transparent"
-                     AbsoluteLayout.LayoutFlags="PositionProportional"
-                     AbsoluteLayout.LayoutBounds=".96,.96,55,55"
-                     Command="{Binding AddRecipeCommand}"/>
     </AbsoluteLayout>
-
 </ContentPage>
